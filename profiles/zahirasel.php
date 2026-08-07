@@ -1,0 +1,435 @@
+<?php
+require '../db.php';
+$pageTitle = "Md Zahir Uddin Rasel | Founder President | SBFC Organization";
+$pageDescription = "Profile of Md Zahir Uddin Rasel – Founder President of SBFC Organization. Inventory & Product Management Specialist with 14+ years of experience in the UAE.";
+include 'header.php';
+?>
+
+<style>
+/* ── Hero ── */
+.zr-hero {
+  min-height:25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 100px;
+  padding-bottom: 30px;
+  background: linear-gradient(150deg, #0d1f17, #12381f);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.zr-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(56,189,112,0.12), transparent);
+  pointer-events: none;
+}
+.zr-hero-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent);
+  margin: 0 auto 28px;
+  display: block;
+  box-shadow: 0 0 0 8px rgba(56,189,112,0.15);
+}
+.zr-hero-name {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+.zr-hero-name em {
+  color: var(--accent);
+  font-style: normal;
+}
+.zr-hero-role {
+  display: inline-block;
+  background: rgba(56,189,112,0.18);
+  border: 1px solid rgba(56,189,112,0.35);
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 600;
+  padding: 8px 28px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+  letter-spacing: 0.03em;
+}
+.zr-hero-sub {
+  font-size: 19px;
+  color: rgba(255,255,255,0.65);
+  max-width: 600px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+.zr-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.zr-tag {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  padding: 6px 18px;
+  border-radius: 999px;
+}
+
+/* ── Layout ── */
+.zr-body {
+  background: #0f1a13;
+  padding: 80px 20px;
+}
+.zr-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 36px;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .zr-container { grid-template-columns: 1fr; }
+}
+
+/* ── Cards ── */
+.zr-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 20px;
+  padding: 36px 32px;
+  margin-bottom: 28px;
+}
+.zr-card-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 22px;
+}
+.zr-card h2 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.zr-card p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.85;
+  margin-bottom: 14px;
+}
+.zr-card p:last-child { margin-bottom: 0; }
+
+/* ── Experience ── */
+.zr-exp-item {
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin-bottom: 26px;
+}
+.zr-exp-item:last-child { margin-bottom: 0; }
+.zr-exp-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.zr-exp-company {
+  font-size: 16px;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.zr-exp-loc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+}
+.zr-badge-current {
+  display: inline-block;
+  background: rgba(56,189,112,0.18);
+  border: 1px solid rgba(56,189,112,0.3);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 999px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+/* ── Skills ── */
+.zr-skill-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 16px;
+  color: rgba(255,255,255,0.8);
+}
+.zr-skill-item:last-child { border-bottom: none; }
+.zr-skill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Languages ── */
+.zr-lang-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 16px;
+}
+.zr-lang-row:last-child { border-bottom: none; }
+.zr-lang-name { color: var(--white); font-weight: 500; }
+.zr-lang-full { color: var(--accent); font-weight: 600; font-size: 14px; }
+.zr-lang-part { color: rgba(255,255,255,0.4); font-size: 14px; }
+
+/* ── Contact ── */
+.zr-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 17px;
+  color: rgba(255,255,255,0.75);
+}
+.zr-contact-item:last-child { border-bottom: none; }
+.zr-contact-item a { color: var(--accent); text-decoration: none; }
+.zr-contact-item a:hover { text-decoration: underline; }
+.zr-contact-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(56,189,112,0.12);
+  border: 1px solid rgba(56,189,112,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+/* ── Accomplishments ── */
+.zr-acc-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 16px;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.7;
+}
+.zr-acc-item:last-child { border-bottom: none; }
+.zr-acc-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  opacity: 0.5;
+  min-width: 32px;
+  line-height: 1.3;
+}
+
+/* ── Personal Info ── */
+.zr-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 16px;
+}
+.zr-info-row:last-child { border-bottom: none; }
+.zr-info-label { color: rgba(255,255,255,0.45); }
+.zr-info-value { color: var(--white); font-weight: 500; }
+
+/* ── CTA ── */
+.zr-cta {
+  background: linear-gradient(135deg, #0d1f17, #12381f);
+  border-top: 1px solid rgba(56,189,112,0.15);
+  text-align: center;
+  padding: 80px 20px;
+}
+.zr-cta h2 {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.zr-cta p {
+  font-size: 19px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 36px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+<div class="page-wrapper">
+
+  <!-- Hero -->
+  <section class="zr-hero">
+    <img src="../images/founder.jpg" alt="Md Zahir Uddin Rasel" class="zr-hero-avatar">
+    <h1 class="zr-hero-name">Md Zahir Uddin <em>Rasel</em></h1>
+    <div class="zr-hero-role">Founder President — SBFC Organization</div>
+    <p class="zr-hero-sub">Inventory & Product Management Specialist with 14+ years of professional experience across the UAE.</p>
+    <div class="zr-hero-tags">
+      <span class="zr-tag">Inventory Management</span>
+      <span class="zr-tag">Data Entry</span>
+      <span class="zr-tag">HR Operations</span>
+      <span class="zr-tag">Sales</span>
+      <span class="zr-tag">Microsoft Dynamics NAV</span>
+      <span class="zr-tag">Team Leadership</span>
+    </div>
+  </section>
+
+  <!-- Body -->
+  <div class="zr-body">
+    <div class="zr-container">
+
+      <!-- LEFT COLUMN -->
+      <div>
+
+        <!-- Personal Info -->
+        <div class="zr-card">
+          <div class="zr-card-label">Personal Info</div>
+          <div class="zr-info-row"><span class="zr-info-label">Nationality</span><span class="zr-info-value">Bangladeshi</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Religion</span><span class="zr-info-value">Islam</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Date of Birth </span><span class="zr-info-value">07 November 1985</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Marital Status </span><span class="zr-info-value">Married</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Spouse</span><span class="zr-info-value"><a href="../family/khadija.php" style="color:var(--accent);text-decoration:none;font-weight:600;">Mst Khadija Akter ↗</a></span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Children </span><span class="zr-info-value">Girl-1, Boy-1</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Children</span><span class="zr-info-value"><a href="../family/fatima.php" style="color:var(--accent);text-decoration:none;">Fatima Tur Rafiya ↗</a> &nbsp;/&nbsp; <a href="../family/mehmed.php" style="color:var(--accent);text-decoration:none;">Mehmed Mostafa ↗</a></span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Location </span><span class="zr-info-value">Sharjah, UAE</span></div>
+        </div>
+
+        <!-- Contact -->
+        <div class="zr-card">
+          <div class="zr-card-label">Contact</div>
+          <div class="zr-contact-item">
+            <div class="zr-contact-icon">📞</div>
+            <a href="tel:+880 199 250 0204">+880 199 250 0204</a>
+          </div>
+          <div class="zr-contact-item">
+            <div class="zr-contact-icon">✉️</div>
+            <a href="mailto:zahirasel@gmail.com">zahirasel@gmail.com</a>
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="zr-card">
+          <div class="zr-card-label">Languages</div>
+          <div class="zr-lang-row"><span class="zr-lang-name">Bangla</span><span class="zr-lang-full">Full Proficiency</span></div>
+          <div class="zr-lang-row"><span class="zr-lang-name">English</span><span class="zr-lang-full">Full Proficiency</span></div>
+          <div class="zr-lang-row"><span class="zr-lang-name">Urdu</span><span class="zr-lang-part">Speaking & Listening</span></div>
+          <div class="zr-lang-row"><span class="zr-lang-name">Hindi</span><span class="zr-lang-part">Speaking & Listening</span></div>
+        </div>
+
+        <!-- Skills -->
+        <div class="zr-card">
+          <div class="zr-card-label">Skills</div>
+          <div class="zr-skill-item"><span class="zr-skill-dot"></span>Microsoft Office (Word, Excel, PowerPoint)</div>
+          <div class="zr-skill-item"><span class="zr-skill-dot"></span>Microsoft Dynamics NAV — Certified</div>
+          <div class="zr-skill-item"><span class="zr-skill-dot"></span>Inventory & Data Entry Software</div>
+          <div class="zr-skill-item"><span class="zr-skill-dot"></span>Adobe Photoshop (Basic)</div>
+          <div class="zr-skill-item"><span class="zr-skill-dot"></span>Internet & Online Research</div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+
+        <!-- About -->
+        <div class="zr-card">
+          <div class="zr-card-label">About</div>
+          <h2>Visionary Leader &amp; Community Builder</h2>
+          <p>Md Zahir Uddin Rasel is the Founder President of SBFC Organization — a movement born from friendship and a shared commitment to lasting community change. With a powerful vision to empower people and build inclusive, resilient communities, he has been a driving force behind SBFC's growth and impact.</p>
+          <p>A self-motivated and enthusiastic professional, he brings over 14 years of hands-on experience in inventory management, HR, and sales across leading UAE-based organizations. He thrives in competitive environments and is known for his ability to translate bold ideas into decisive action.</p>
+        </div>
+
+        <!-- Experience -->
+        <div class="zr-card">
+          <div class="zr-card-label">Work Experience</div>
+
+          <div class="zr-exp-item">
+            <div class="zr-exp-title">Inventory Department / Manager<span class="zr-badge-current">Current</span></div>
+            <div class="zr-exp-company">Smart Village Hypermarket LLC</div>
+            <div class="zr-exp-loc">Sharjah, UAE</div>
+          </div>
+
+          <div class="zr-exp-item">
+            <div class="zr-exp-title">Inventory / Data Entry — 10 Years</div>
+            <div class="zr-exp-company">Ansar Group</div>
+            <div class="zr-exp-loc">UAE</div>
+          </div>
+
+          <div class="zr-exp-item">
+            <div class="zr-exp-title">HR Department — 2 Years</div>
+            <div class="zr-exp-company">Global Non-Woven Fabrics Ind. Ltd</div>
+            <div class="zr-exp-loc">Bangladesh</div>
+          </div>
+
+          <div class="zr-exp-item">
+            <div class="zr-exp-title">Sales Department — 2 Years</div>
+            <div class="zr-exp-company">Ansar Mall</div>
+          </div>
+        </div>
+
+        <!-- Accomplishments -->
+        <div class="zr-card">
+          <div class="zr-card-label">Accomplishments</div>
+          <div class="zr-acc-item"><span class="zr-acc-num">01</span><span>Consistently led teams during academic and professional projects, securing top positions in presentations and data collection.</span></div>
+          <div class="zr-acc-item"><span class="zr-acc-num">02</span><span>Recognized by faculty as one of the finest presenters in the department.</span></div>
+          <div class="zr-acc-item"><span class="zr-acc-num">03</span><span>Awarded a Certificate of Achievement from <strong style="color:var(--white);">Microsoft NAV Dynamic, UAE</strong>.</span></div>
+          <div class="zr-acc-item"><span class="zr-acc-num">04</span><span>Produced promotional video content for various organizational and corporate occasions.</span></div>
+        </div>
+
+        <!-- Education -->
+        <div class="zr-card">
+          <div class="zr-card-label">Education</div>
+          <div class="zr-exp-item">
+            <div class="zr-exp-title">HSC — GPA 3.87 / 5.00</div>
+            <div class="zr-exp-company">Sorowardi College, Dhaka</div>
+            <div class="zr-exp-loc">2003 – 2005</div>
+          </div>
+          <div class="zr-exp-item">
+            <div class="zr-exp-title">SSC — GPA 3.03 / 5.00</div>
+            <div class="zr-exp-company">Shyampur Bohumukhi High School</div>
+            <div class="zr-exp-loc">2001 – 2003</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="zr-cta">
+    <h2>Join the Movement</h2>
+    <p>Support the mission Zahir Rasel helped build — empowering communities across the UAE and beyond.</p>
+    <a href="../give.php" class="btn-white"><i class="fas fa-heart"></i> Donate Now</a>
+    &nbsp;&nbsp;
+    <a href="../founder.php" class="btn-white" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.75);"><i class="fas fa-arrow-left"></i> Back to Founders</a>
+  </div>
+
+</div>
+
+<?php include 'footer.php'; ?>

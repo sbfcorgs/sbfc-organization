@@ -1,0 +1,95 @@
+<?php
+require '../db.php';
+$pageTitle = "Late Md Jony Hossain | Founder | SBFC Organization";
+$pageDescription = "In memory of Late Md Jony Hossain – a founding member of SBFC Organization, forever remembered for his dedication and compassion.";
+include 'header.php';
+?>
+<style>
+.zr-hero{min-height:25vh;padding-top:100px;padding-bottom:25px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(150deg,#111118,#1e1e2e);text-align:center;position:relative;overflow:hidden;}
+.zr-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(99,102,241,.10),transparent);pointer-events:none;}
+.zr-hero-avatar{width:160px;height:160px;border-radius:50%;object-fit:cover;border:4px solid #a5b4fc;margin:0 auto 28px;display:block;filter:grayscale(20%);box-shadow:0 0 0 8px rgba(99,102,241,.12);}
+.zr-avatar-placeholder{width:160px;height:160px;border-radius:50%;background:rgba(99,102,241,.10);border:4px solid #a5b4fc;margin:0 auto 28px;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:800;color:#a5b4fc;box-shadow:0 0 0 8px rgba(99,102,241,.10);}
+.zr-hero-name{font-size:clamp(36px,5vw,64px);font-weight:800;color:#fff;margin-bottom:12px;line-height:1.1;}
+.zr-hero-name em{color:#a5b4fc;font-style:normal;}
+.zr-hero-role{display:inline-block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:#a5b4fc;font-size:18px;font-weight:600;padding:8px 28px;border-radius:999px;margin-bottom:24px;letter-spacing:.03em;}
+.zr-hero-sub{font-size:19px;color:rgba(255,255,255,.55);max-width:600px;margin:0 auto 36px;line-height:1.7;}
+.zr-hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:700px;margin:0 auto;}
+.zr-tag{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:15px;padding:6px 18px;border-radius:999px;}
+.zr-body{background:#0e0e16;padding:80px 20px;}
+.zr-container{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:36px;align-items:start;}
+@media(max-width:760px){.zr-container{grid-template-columns:1fr;}}
+.zr-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:36px 32px;margin-bottom:28px;}
+.zr-card-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#a5b4fc;margin-bottom:22px;}
+.zr-card h2{font-size:30px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.3;}
+.zr-card p{font-size:17px;color:rgba(255,255,255,.60);line-height:1.9;margin-bottom:14px;}
+.zr-card p:last-child{margin-bottom:0;}
+.zr-info-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:16px;}
+.zr-info-row:last-child{border-bottom:none;}
+.zr-info-label{color:rgba(255,255,255,.38);}
+.zr-info-value{color:#fff;font-weight:500;}
+.zr-memorial-quote{background:rgba(99,102,241,.07);border-left:4px solid #a5b4fc;border-radius:0 14px 14px 0;padding:28px;margin-bottom:28px;font-size:20px;font-style:italic;color:rgba(255,255,255,.65);line-height:1.8;}
+.zr-notice{background:rgba(99,102,241,.06);border:1px dashed rgba(99,102,241,.3);border-radius:14px;padding:28px;text-align:center;color:rgba(255,255,255,.45);font-size:16px;line-height:1.7;margin-bottom:28px;}
+.zr-notice strong{color:#a5b4fc;display:block;font-size:18px;margin-bottom:8px;}
+.zr-cta{background:linear-gradient(135deg,#111118,#1e1e2e);border-top:1px solid rgba(99,102,241,.15);text-align:center;padding:80px 20px;}
+.zr-cta h2{font-size:clamp(28px,4vw,48px);font-weight:800;color:#fff;margin-bottom:16px;}
+.zr-cta p{font-size:19px;color:rgba(255,255,255,.55);margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto;}
+</style>
+<div class="page-wrapper">
+  <section class="zr-hero">
+    <img src="../images/founder4.jpg" alt="Late Md Jony Hossain" class="zr-hero-avatar"
+      onerror="this.style.display='none';document.getElementById('jony-placeholder').style.display='flex';">
+    <div id="jony-placeholder" class="zr-avatar-placeholder" style="display:none;">JH</div>
+    <h1 class="zr-hero-name">Late Md Jony <em>Hossain</em></h1>
+    <div class="zr-hero-role">In Memoriam — Founder, SBFC Organization</div>
+    <p class="zr-hero-sub">Forever remembered for his unwavering dedication to social empowerment, compassion, and the people he loved.</p>
+    <div class="zr-hero-tags">
+      <span class="zr-tag">Social Empowerment</span>
+      <span class="zr-tag">Compassion</span>
+      <span class="zr-tag">Community Spirit</span>
+      <span class="zr-tag">Forever in Our Hearts</span>
+    </div>
+  </section>
+  <div class="zr-body">
+    <div class="zr-container">
+      <div>
+        <div class="zr-card">
+          <div class="zr-card-label">Basic Info</div>
+          <div class="zr-info-row"><span class="zr-info-label">Role</span><span class="zr-info-value">Founder</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Organization</span><span class="zr-info-value">SBFC Organization</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Nationality</span><span class="zr-info-value">Bangladeshi</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Date of Birth</span><span class="zr-info-value">06 March 1985</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Date of Death</span><span class="zr-info-value"></span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Spouse</span><span class="zr-info-value"><a href="../family/rojina.php" style="color:var(--accent);text-decoration:none;font-weight:600;">Rojina Begum ↗</a></span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Children </span><span class="zr-info-value">Boy-1</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Children</span><span class="zr-info-value"><a href="../family/tanveer.php" style="color:var(--accent);text-decoration:none;">Tanveer Hossain ↗</a></span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Location </span><span class="zr-info-value">Dhaka, Bangladesh</span></div>
+          <div class="zr-info-row"><span class="zr-info-label">Status</span><span class="zr-info-value" style="color:#a5b4fc;">In Memoriam</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="zr-card">
+          <div class="zr-card-label">Remembrance</div>
+          <h2>A Soul Who Gave Everything</h2>
+          <p>Late Md Jony Hossain was one of the founding hearts of SBFC Organization. His warmth, generosity, and tireless commitment to the welfare of others left a mark that time will never erase.</p>
+          <p>He believed deeply in the power of community — that ordinary people, working together with love and purpose, could create extraordinary change. That belief lives on in every initiative SBFC carries forward in his name.</p>
+          <p>Though he is no longer with us, his spirit remains the foundation upon which this organization stands. We honor him not just in words, but in every act of service we perform.</p>
+        </div>
+        <div class="zr-memorial-quote">
+          "A life lived for others is a life well lived." — His memory continues to inspire all of us at SBFC.
+        </div>
+        <div class="zr-notice">
+          <strong>More to Be Added in His Memory</strong>
+          A dedicated tribute, photos, and memories shared by those who knew him will be published here soon.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="zr-cta">
+    <h2>Honor His Legacy</h2>
+    <p>Continue the mission Jony believed in — a community where everyone is seen, supported, and uplifted.</p>
+    <a href="../give.php" class="btn-white"><i class="fas fa-heart"></i> Donate in His Memory</a>
+    &nbsp;&nbsp;
+    <a href="../founder.php" class="btn-white" style="background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);"><i class="fas fa-arrow-left"></i> Back to Founders</a>
+  </div>
+</div>
+<?php include 'footer.php'; ?>

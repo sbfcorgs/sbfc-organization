@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit & Loss | SBFC Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        :root {
+            --bg: #07120d;
+            --bg-card: #0d1f17;
+            --accent: #4ade80;
+            --white: #f4fff7;
+            --text-muted: #9bbdab;
+            --ff-head: "Playfair Display", serif;
+            --ff-body: "DM Sans", sans-serif;
+        }
+        body { margin: 0; background: var(--bg); color: var(--white); font-family: var(--ff-body); }
+        main { max-width: 1320px; margin: 0 auto; padding: 30px 24px 50px; }
+        .admin-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .admin-topbar h1 { font-family: var(--ff-head); margin: 0 0 6px; font-size: 32px; color: var(--white); }
+        .meta { color: var(--text-muted); font-size: 13px; }
+        .glass-card { background: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2); }
+        .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .admin-table th { padding: 12px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.6px; text-align: left; background: #081710; }
+        .admin-table td { padding: 13px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); font-size: 13px; }
+        .btn-primary { background: #1a6b4a; color: #fff; border: 0; border-radius: 30px; padding: 10px 18px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+        .badge { display: inline-block; border-radius: 99px; padding: 4px 10px; font-size: 11px; font-weight: 700; }
+        .badge-saving { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+        #statusNotice { padding: 12px 16px; background: #1b382b; border: 1px solid #2e5944; color: #a7f3bd; border-radius: 8px; margin-bottom: 20px; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div id="common-header"></div>
+    <main>
+        <div id="statusNotice"><i class="fas fa-sync fa-spin"></i> Calculating live Profit & Loss from Cloudflare D1 Database…</div>
+
+        <div class="admin-topbar">
+            <div>
+                <span class="badge badge-saving" style="margin-bottom:8px;"><i class="fas fa-chart-line"></i> Savings & Finance</span>
+                <h1>Profit & Loss Statement</h1>
+                <div class="meta">Live real-time financial income, costs and net profit statement</div>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button onclick="loadProfitLoss()" class="btn-primary" style="border:none;cursor:pointer;"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button onclick="window.print()" class="btn-primary" style="background:#20382a;color:#cce8d5;border:1px solid #3b5d48;cursor:pointer;"><i class="fas fa-print"></i> Print P&L</button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:18px;margin-bottom:28px;">
+            <div class="glass-card" style="padding:22px;border-color:rgba(110,231,183,0.25);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-arrow-up" style="color:#6ee7b7;margin-right:6px;"></i>Total Income</div>
+                <div style="font-family:var(--ff-head);font-size:30px;color:#6ee7b7;" id="totalIncome">৳0.00</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Member Profit + Bank Interest</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(252,165,165,0.25);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-arrow-down" style="color:#fca5a5;margin-right:6px;"></i>Total Expenses</div>
+                <div style="font-family:var(--ff-head);font-size:30px;color:#fca5a5;" id="totalExpense">৳0.00</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Costs + Bank Charges</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(74,222,128,0.25);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-balance-scale" style="color:#4ade80;margin-right:6px;"></i>Net Profit / Loss</div>
+                <div style="font-family:var(--ff-head);font-size:30px;color:#4ade80;" id="netProfit">৳0.00</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;" id="netProfitStatus">Total Income − Expenses</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(251,191,36,0.25);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-university" style="color:#fbbf24;margin-right:6px;"></i>Bank Interest</div>
+                <div style="font-family:var(--ff-head);font-size:30px;color:#fbbf24;" id="bankInterest">৳0.00</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Bank profit earned</div>
+            </div>
+        </div>
+
+        <!-- Chart + P&L Statement -->
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:22px;margin-bottom:28px;">
+            <!-- Chart -->
+            <div class="glass-card" style="padding:24px;">
+                <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:14px;"><i class="fas fa-chart-bar" style="color:#4ade80;margin-right:8px;"></i>Income vs Expense Overview</div>
+                <div id="plChart"></div>
+            </div>
+
+            <!-- P&L Table -->
+            <div class="glass-card" style="padding:0;overflow:hidden;">
+                <div style="padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px;font-weight:700;color:var(--white);">
+                    <i class="fas fa-file-invoice" style="color:#4ade80;margin-right:8px;"></i>P&L Statement Breakdown
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Description</th><th style="text-align:right;">Amount</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:rgba(110,231,183,0.06);">
+                            <td colspan="2" style="font-weight:800;color:#6ee7b7;font-size:11px;letter-spacing:1px;text-transform:uppercase;">INCOME</td>
+                        </tr>
+                        <tr><td style="padding-left:24px;">Member Profit Distributed</td><td style="text-align:right;color:#6ee7b7;font-weight:600;" id="plMemberProfit">৳0.00</td></tr>
+                        <tr><td style="padding-left:24px;">Bank Interest / Profit</td><td style="text-align:right;color:#6ee7b7;font-weight:600;" id="plBankProfit">৳0.00</td></tr>
+                        <tr style="background:rgba(255,255,255,0.05);font-weight:800;">
+                            <td>Total Income</td>
+                            <td style="text-align:right;color:#6ee7b7;" id="plTotalIncome">৳0.00</td>
+                        </tr>
+
+                        <tr style="background:rgba(252,165,165,0.06);">
+                            <td colspan="2" style="font-weight:800;color:#fca5a5;font-size:11px;letter-spacing:1px;text-transform:uppercase;">EXPENSES</td>
+                        </tr>
+                        <tr><td style="padding-left:24px;">Operational Costs / Expense</td><td style="text-align:right;color:#fca5a5;font-weight:600;" id="plCosts">৳0.00</td></tr>
+                        <tr><td style="padding-left:24px;">Bank Service Charges</td><td style="text-align:right;color:#fca5a5;font-weight:600;" id="plBankCharge">৳0.00</td></tr>
+                        <tr style="background:rgba(255,255,255,0.05);font-weight:800;">
+                            <td>Total Expenses</td>
+                            <td style="text-align:right;color:#fca5a5;" id="plTotalExpense">৳0.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background:rgba(74,222,128,0.1);font-weight:900;font-size:15px;">
+                            <td style="color:var(--white);">Net Profit / Loss</td>
+                            <td style="text-align:right;color:#4ade80;" id="plNetProfit">৳0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Member-wise Profit Table -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span class="badge badge-saving"><i class="fas fa-users"></i> Member Profit Distribution</span>
+            <div style="flex:1;height:1px;background:rgba(34,197,94,0.2);"></div>
+        </div>
+        <div class="glass-card" style="padding:0;overflow:hidden;margin-bottom:28px;">
+            <div style="overflow-x:auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Member ID</th>
+                            <th>Full Name</th>
+                            <th style="text-align:right;">Total Profit Received</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberProfitRows">
+                        <tr><td colspan="3" style="text-align:center;color:var(--text-muted);">Loading member profit data…</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background:rgba(74,222,128,0.06);font-weight:800;">
+                            <td colspan="2" style="font-weight:800;color:var(--white);">Total Profit Distributed to Members</td>
+                            <td style="text-align:right;font-weight:800;color:#4ade80;" id="memberProfitTotal">৳0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </main>
+    <div id="common-footer"></div>
+
+    <script>
+        const API_BASE = "https://sbfc-organization.sbfcorgs.workers.dev";
+        const fmt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+        let chartObj = null;
+
+        function esc(str) {
+            const d = document.createElement("div");
+            d.textContent = str ?? "—";
+            return d.innerHTML;
+        }
+
+        async function loadProfitLoss() {
+            const notice = document.getElementById("statusNotice");
+            notice.style.display = "block";
+            notice.innerHTML = '<i class="fas fa-sync fa-spin"></i> Loading financial data from Cloudflare D1 Database…';
+
+            try {
+                // Try dashboard API first or savings report API
+                const res = await fetch(API_BASE + "/api/dashboard", {
+                    credentials: "include",
+                    cache: "no-store"
+                });
+
+                if (!res.ok) throw new Error("HTTP " + res.status + " error loading data");
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.error || "Failed to fetch financial data");
+
+                const s = data.savings || {};
+                const txTotals = s.transactionTotals || {};
+
+                // Compute Income
+                const memberProfit = Number(txTotals["Profit"] || 0);
+                const bankProfit = Number(txTotals["Bank Profit"] || 0);
+                const totalIncome = memberProfit + bankProfit;
+
+                // Compute Expenses
+                const costs = Number(txTotals["Cost"] || 0);
+                const bankCharge = Number(txTotals["Bank Charge"] || 0);
+                const totalExpense = costs + bankCharge;
+
+                // Compute Net
+                const netProfit = totalIncome - totalExpense;
+
+                // Update Cards
+                document.getElementById("totalIncome").textContent = "৳" + fmt.format(totalIncome);
+                document.getElementById("totalExpense").textContent = "৳" + fmt.format(totalExpense);
+                document.getElementById("netProfit").textContent = "৳" + fmt.format(netProfit);
+                document.getElementById("netProfit").style.color = netProfit >= 0 ? "#4ade80" : "#fca5a5";
+                document.getElementById("netProfitStatus").textContent = netProfit >= 0 ? "✓ Net Profit (Surplus)" : "⚠ Net Loss (Deficit)";
+                document.getElementById("bankInterest").textContent = "৳" + fmt.format(bankProfit);
+
+                // Update P&L Table
+                document.getElementById("plMemberProfit").textContent = "৳" + fmt.format(memberProfit);
+                document.getElementById("plBankProfit").textContent = "৳" + fmt.format(bankProfit);
+                document.getElementById("plTotalIncome").textContent = "৳" + fmt.format(totalIncome);
+
+                document.getElementById("plCosts").textContent = "৳" + fmt.format(costs);
+                document.getElementById("plBankCharge").textContent = "৳" + fmt.format(bankCharge);
+                document.getElementById("plTotalExpense").textContent = "৳" + fmt.format(totalExpense);
+
+                document.getElementById("plNetProfit").textContent = "৳" + fmt.format(netProfit);
+                document.getElementById("plNetProfit").style.color = netProfit >= 0 ? "#4ade80" : "#fca5a5";
+
+                // Render Member Profit Table (from dashboard or calculation)
+                const tbody = document.getElementById("memberProfitRows");
+                tbody.innerHTML = `
+                    <tr>
+                        <td style="font-family:monospace;color:#4ade80;font-weight:600;">SBFC-MEMBERS</td>
+                        <td style="font-weight:600;color:var(--white);">Total Member Profit Distributed</td>
+                        <td style="text-align:right;color:#6ee7b7;font-weight:700;">৳${fmt.format(memberProfit)}</td>
+                    </tr>
+                `;
+                document.getElementById("memberProfitTotal").textContent = "৳" + fmt.format(memberProfit);
+
+                // Render Chart
+                renderPLChart(totalIncome, totalExpense, memberProfit, bankProfit, costs, bankCharge);
+
+                notice.style.display = "none";
+            } catch (err) {
+                console.error(err);
+                notice.style.background = "#4c2020";
+                notice.style.color = "#fca5a5";
+                notice.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error loading P&L data: ' + esc(err.message) + '. Please sign in through the admin panel.';
+            }
+        }
+
+        function renderPLChart(totalIncome, totalExpense, memberProfit, bankProfit, costs, bankCharge) {
+            if (chartObj) chartObj.destroy();
+
+            chartObj = new ApexCharts(document.getElementById("plChart"), {
+                chart: { type: 'bar', height: 260, background: 'transparent', toolbar: { show: false } },
+                theme: { mode: 'dark' },
+                series: [
+                    { name: 'Income Breakdown', data: [memberProfit, bankProfit] },
+                    { name: 'Expense Breakdown', data: [costs, bankCharge] }
+                ],
+                xaxis: { categories: ['Member Share / Profit', 'Bank Interest / Charge'], labels: { style: { colors: '#9bbdab' } } },
+                yaxis: { labels: { style: { colors: '#9bbdab' }, formatter: v => '৳' + fmt.format(v) } },
+                colors: ['#4ade80', '#fca5a5'],
+                plotOptions: { bar: { borderRadius: 4, columnWidth: '50%' } },
+                grid: { borderColor: 'rgba(255,255,255,0.05)' }
+            });
+            chartObj.render();
+        }
+
+        async function loadCommonPart(targetId, fileName) {
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            try {
+                const res = await fetch(fileName, { cache: 'no-cache' });
+                if (!res.ok) throw new Error(fileName + ' missing');
+                target.innerHTML = await res.text();
+                target.querySelectorAll('script').forEach((oldScript) => {
+                    const script = document.createElement('script');
+                    [...oldScript.attributes].forEach(attr => script.setAttribute(attr.name, attr.value));
+                    script.textContent = oldScript.textContent;
+                    oldScript.replaceWith(script);
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadCommonPart("common-header", "/header.html");
+            await loadCommonPart("common-footer", "/footer.html");
+            loadProfitLoss();
+        });
+    </script>
+</body>
+</html>

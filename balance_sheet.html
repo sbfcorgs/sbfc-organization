@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Balance Sheet | SBFC Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --bg: #091510;
+            --panel: #10231b;
+            --white: #f4fbf6;
+            --text-muted: #8ca596;
+            --accent: #f5a623;
+            --ff-head: "Playfair Display", serif;
+            --ff-body: "DM Sans", sans-serif;
+        }
+        body { margin: 0; background: radial-gradient(circle at 15% 0, #163b2a 0, transparent 32%), var(--bg); color: #c1d2c7; font-family: var(--ff-body); }
+        main { max-width: 1320px; margin: auto; padding: 30px 24px 50px; }
+        .glass-card { background: linear-gradient(145deg, rgba(26, 52, 39, 0.94), rgba(13, 32, 23, 0.94)); border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 14px; box-shadow: 0 12px 35px #0002; }
+        .admin-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .admin-topbar h1 { font-family: var(--ff-head); margin: 0 0 6px; color: var(--white); font-size: 32px; }
+        .meta { font-size: 13px; color: var(--text-muted); }
+        .admin-table { border-collapse: collapse; width: 100%; min-width: 600px; }
+        .admin-table th { text-align: left; padding: 13px 16px; font-size: 11px; letter-spacing: 0.6px; color: var(--text-muted); text-transform: uppercase; background: #0d2017; }
+        .admin-table td { padding: 14px 16px; border-top: 1px solid rgba(255, 255, 255, 0.055); font-size: 13px; }
+        .btn-primary { background: #29824b; color: white; border-radius: 30px; padding: 10px 18px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; }
+        .badge-saving { background: rgba(74, 222, 128, 0.15); color: #6ee7b7; border: 1px solid rgba(74, 222, 128, 0.3); }
+        #statusNotice { padding: 12px 16px; background: #1b382b; border: 1px solid #2e5944; color: #a7f3bd; border-radius: 8px; margin-bottom: 20px; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div id="common-header"></div>
+    <main>
+        <div id="statusNotice"><i class="fas fa-sync fa-spin"></i> Calculating live Balance Sheet from Cloudflare D1 Database…</div>
+
+        <div class="admin-topbar">
+            <div>
+                <span class="badge badge-saving" style="margin-bottom:8px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;"><i class="fas fa-balance-scale"></i> Savings & Finance</span>
+                <h1>Balance Sheet</h1>
+                <div class="meta" id="asOfDateText">Financial statement as of today</div>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button onclick="loadBalanceSheet()" class="btn-primary"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <button onclick="downloadPDF()" class="btn-primary" style="background:#1d4ed8;"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                <button onclick="window.print()" class="btn-primary" style="background:#20382a;color:#cce8d5;border:1px solid #3b5d48;"><i class="fas fa-print"></i> Print</button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:18px;margin-bottom:32px;">
+            <div class="glass-card" style="padding:22px;border-color:rgba(110,231,183,0.2);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-money-bill-wave" style="color:#6ee7b7;margin-right:6px;"></i>Total Cash In</div>
+                <div style="font-family:var(--ff-head);font-size:28px;color:#6ee7b7;" id="cardCashIn">৳0.00</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(252,165,165,0.2);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-arrow-circle-down" style="color:#fca5a5;margin-right:6px;"></i>Total Cash Out</div>
+                <div style="font-family:var(--ff-head);font-size:28px;color:#fca5a5;" id="cardCashOut">৳0.00</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(245,166,35,0.25);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-wallet" style="color:var(--accent);margin-right:6px;"></i>Cash In Hand</div>
+                <div style="font-family:var(--ff-head);font-size:28px;color:var(--accent);" id="cardCashHand">৳0.00</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(251,191,36,0.2);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-university" style="color:#fbbf24;margin-right:6px;"></i>Bank Balance</div>
+                <div style="font-family:var(--ff-head);font-size:28px;color:#fbbf24;" id="cardBankBalance">৳0.00</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(167,139,250,0.2);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-hand-holding-usd" style="color:#a78bfa;margin-right:6px;"></i>Loans Active</div>
+                <div style="font-family:var(--ff-head);font-size:28px;color:#a78bfa;" id="cardLoans">৳0.00</div>
+            </div>
+            <div class="glass-card" style="padding:22px;border-color:rgba(255,255,255,0.15);">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;"><i class="fas fa-layer-group" style="color:#fff;margin-right:6px;"></i>Total Assets</div>
+                <div style="font-family:var(--ff-head);font-size:28px;color:var(--white);" id="cardAssets">৳0.00</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Cash + Bank + Loans</div>
+            </div>
+        </div>
+
+        <!-- Charts + Table -->
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;margin-bottom:36px;">
+            <div style="display:flex;flex-direction:column;gap:24px;">
+                <div class="glass-card" style="padding:24px;">
+                    <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:16px;">Cash Flow Overview</div>
+                    <div id="cashChart"></div>
+                </div>
+                <div class="glass-card" style="padding:24px;">
+                    <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:16px;">Profit vs Expense</div>
+                    <div id="profitChart"></div>
+                </div>
+            </div>
+
+            <!-- Full Statement Table -->
+            <div class="glass-card" style="padding:0;overflow:hidden;" id="finalStatement">
+                <div style="padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.07);">
+                    <div style="font-family:var(--ff-head);font-size:18px;color:var(--white);">Full Financial Statement</div>
+                    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Official SBFC Balance Sheet Report</div>
+                </div>
+                <table class="admin-table">
+                    <thead><tr><th style="text-align:left;">Financial Breakdown Item</th><th style="text-align:right;">Amount (BDT)</th></tr></thead>
+                    <tbody>
+                        <!-- CASH IN -->
+                        <tr><td>Member Share Deposits</td><td style="text-align:right;color:#6ee7b7;font-weight:600;" id="stShare">৳0.00</td></tr>
+                        <tr><td>Member Profit Received</td><td style="text-align:right;color:#6ee7b7;font-weight:600;" id="stProfit">৳0.00</td></tr>
+                        <tr><td>Personal Loan Returns</td><td style="text-align:right;color:#6ee7b7;" id="stLoanReturn">৳0.00</td></tr>
+                        <tr><td>Business Loan Returns</td><td style="text-align:right;color:#6ee7b7;" id="stBizReturn">৳0.00</td></tr>
+                        <tr><td>Bank Withdrawals (to hand)</td><td style="text-align:right;color:#6ee7b7;" id="stWithdraw">৳0.00</td></tr>
+                        <tr style="background:rgba(110,231,183,0.06);">
+                            <td style="font-weight:700;color:var(--white);">Total Cash In</td>
+                            <td style="text-align:right;font-weight:800;color:#6ee7b7;font-size:15px;" id="stTotalCashIn">৳0.00</td>
+                        </tr>
+
+                        <!-- CASH OUT -->
+                        <tr><td>Personal Loans Disbursed</td><td style="text-align:right;color:#fca5a5;" id="stLoanOut">৳0.00</td></tr>
+                        <tr><td>Business Loans Disbursed</td><td style="text-align:right;color:#fca5a5;" id="stBizOut">৳0.00</td></tr>
+                        <tr><td>Share Returns to Members</td><td style="text-align:right;color:#fca5a5;" id="stShareReturn">৳0.00</td></tr>
+                        <tr><td>Operational Cost / Expenses</td><td style="text-align:right;color:#fca5a5;" id="stCost">৳0.00</td></tr>
+                        <tr><td>Bank Deposits (from hand)</td><td style="text-align:right;color:#fca5a5;" id="stDeposit">৳0.00</td></tr>
+                        <tr style="background:rgba(252,165,165,0.06);">
+                            <td style="font-weight:700;color:var(--white);">Total Cash Out</td>
+                            <td style="text-align:right;font-weight:800;color:#fca5a5;font-size:15px;" id="stTotalCashOut">৳0.00</td>
+                        </tr>
+
+                        <!-- CASH IN HAND -->
+                        <tr style="background:rgba(245,166,35,0.08);">
+                            <td style="font-weight:700;color:var(--white);font-size:15px;">💰 Cash In Hand</td>
+                            <td style="text-align:right;font-weight:800;color:var(--accent);font-size:16px;" id="stCashHand">৳0.00</td>
+                        </tr>
+
+                        <!-- BANK -->
+                        <tr><td>Bank Cash Deposited</td><td style="text-align:right;color:#fbbf24;" id="stBankDeposit">৳0.00</td></tr>
+                        <tr><td>Bank Interest / Profit</td><td style="text-align:right;color:#fbbf24;" id="stBankProfit">৳0.00</td></tr>
+                        <tr><td>Bank Cash Withdrawn</td><td style="text-align:right;color:var(--text-muted);" id="stBankWithdraw">(৳0.00)</td></tr>
+                        <tr><td>Bank Charges</td><td style="text-align:right;color:var(--text-muted);" id="stBankCharge">(৳0.00)</td></tr>
+                        <tr style="background:rgba(251,191,36,0.08);">
+                            <td style="font-weight:700;color:var(--white);">🏦 Bank Balance</td>
+                            <td style="text-align:right;font-weight:800;color:#fbbf24;font-size:15px;" id="stBankBalance">৳0.00</td>
+                        </tr>
+
+                        <!-- TOTAL ASSETS -->
+                        <tr style="background:rgba(255,255,255,0.08);">
+                            <td style="font-weight:800;color:var(--white);font-size:16px;">📊 Total Assets (Cash + Bank + Loans)</td>
+                            <td style="text-align:right;font-weight:900;color:var(--white);font-size:18px;" id="stTotalAssets">৳0.00</td>
+                        </tr>
+
+                        <!-- EQUITY -->
+                        <tr style="background:rgba(167,139,250,0.08);">
+                            <td style="font-weight:700;color:var(--white);">🏛️ Total Equity <small style="color:var(--text-muted);font-size:11px;">(Net Fund Value)</small></td>
+                            <td style="text-align:right;font-weight:800;color:#a78bfa;font-size:15px;" id="stTotalEquity">৳0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <div id="common-footer"></div>
+
+    <script>
+        const API_BASE = "https://sbfc-organization.sbfcorgs.workers.dev";
+        const fmt = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+        let cashChartObj = null, profitChartObj = null;
+
+        function esc(str) {
+            const d = document.createElement("div");
+            d.textContent = str ?? "—";
+            return d.innerHTML;
+        }
+
+        async function loadBalanceSheet() {
+            const notice = document.getElementById("statusNotice");
+            notice.style.display = "block";
+            notice.innerHTML = '<i class="fas fa-sync fa-spin"></i> Loading Balance Sheet from Cloudflare D1 Database…';
+
+            try {
+                const res = await fetch(API_BASE + "/api/dashboard", {
+                    credentials: "include",
+                    cache: "no-store"
+                });
+
+                if (!res.ok) throw new Error("HTTP " + res.status + " error loading data");
+                const data = await res.json();
+                if (!data.ok) throw new Error(data.error || "Failed to fetch data");
+
+                const s = data.savings || {};
+                const c = s.calculations || {
+                    totalCashIn: s.cashIn || 0,
+                    totalCashOut: s.cashOut || 0,
+                    cashInHand: s.cashInHand || 0,
+                    bankBalance: s.bankBalance || 0,
+                    loanBalance: 0,
+                    bizLoanBalance: 0,
+                    totalAssets: (s.cashInHand || 0) + (s.bankBalance || 0),
+                    cashShare: 0, cashProfit: 0, cashLoanReturn: 0, cashBizReturn: 0, cashWithdraw: 0,
+                    cashLoanOut: 0, cashBizOut: 0, cashCost: 0, cashShareReturn: 0, cashDeposit: 0,
+                    bankProfit: 0, bankCharge: 0
+                };
+
+                const tx = s.transactionTotals || {};
+                const share = c.cashShare || tx["Share"] || 0;
+                const profit = c.cashProfit || tx["Profit"] || 0;
+                const loanRet = c.cashLoanReturn || tx["Return Loan"] || 0;
+                const bizRet = c.cashBizReturn || tx["Business Loan Return"] || 0;
+                const withdraw = c.cashWithdraw || tx["Withdraw From Bank"] || 0;
+
+                const loanOut = c.cashLoanOut || tx["Loan"] || 0;
+                const bizOut = c.cashBizOut || tx["Business Loan"] || 0;
+                const shareRet = c.cashShareReturn || tx["Share Return"] || 0;
+                const cost = c.cashCost || tx["Cost"] || 0;
+                const deposit = c.cashDeposit || tx["Deposit To Bank"] || 0;
+
+                const bankProfit = c.bankProfit || tx["Bank Profit"] || 0;
+                const bankCharge = c.bankCharge || tx["Bank Charge"] || 0;
+
+                const totalLoans = Math.max(0, (loanOut + bizOut) - (loanRet + bizRet));
+                const totalAssets = c.cashInHand + c.bankBalance + totalLoans;
+                const equity = (share + profit + bankProfit) - (shareRet + cost + bankCharge);
+
+                // Update Cards
+                document.getElementById("cardCashIn").textContent = "৳" + fmt.format(s.cashIn || c.totalCashIn);
+                document.getElementById("cardCashOut").textContent = "৳" + fmt.format(s.cashOut || c.totalCashOut);
+                document.getElementById("cardCashHand").textContent = "৳" + fmt.format(s.cashInHand || c.cashInHand);
+                document.getElementById("cardBankBalance").textContent = "৳" + fmt.format(s.bankBalance || c.bankBalance);
+                document.getElementById("cardLoans").textContent = "৳" + fmt.format(totalLoans);
+                document.getElementById("cardAssets").textContent = "৳" + fmt.format(totalAssets);
+
+                // Update Table Rows
+                document.getElementById("stShare").textContent = "৳" + fmt.format(share);
+                document.getElementById("stProfit").textContent = "৳" + fmt.format(profit);
+                document.getElementById("stLoanReturn").textContent = "৳" + fmt.format(loanRet);
+                document.getElementById("stBizReturn").textContent = "৳" + fmt.format(bizRet);
+                document.getElementById("stWithdraw").textContent = "৳" + fmt.format(withdraw);
+                document.getElementById("stTotalCashIn").textContent = "৳" + fmt.format(s.cashIn || c.totalCashIn);
+
+                document.getElementById("stLoanOut").textContent = "৳" + fmt.format(loanOut);
+                document.getElementById("stBizOut").textContent = "৳" + fmt.format(bizOut);
+                document.getElementById("stShareReturn").textContent = "৳" + fmt.format(shareRet);
+                document.getElementById("stCost").textContent = "৳" + fmt.format(cost);
+                document.getElementById("stDeposit").textContent = "৳" + fmt.format(deposit);
+                document.getElementById("stTotalCashOut").textContent = "৳" + fmt.format(s.cashOut || c.totalCashOut);
+
+                document.getElementById("stCashHand").textContent = "৳" + fmt.format(s.cashInHand);
+
+                document.getElementById("stBankDeposit").textContent = "৳" + fmt.format(deposit);
+                document.getElementById("stBankProfit").textContent = "৳" + fmt.format(bankProfit);
+                document.getElementById("stBankWithdraw").textContent = "(৳" + fmt.format(withdraw) + ")";
+                document.getElementById("stBankCharge").textContent = "(৳" + fmt.format(bankCharge) + ")";
+                document.getElementById("stBankBalance").textContent = "৳" + fmt.format(s.bankBalance);
+
+                document.getElementById("stTotalAssets").textContent = "৳" + fmt.format(totalAssets);
+                document.getElementById("stTotalEquity").textContent = "৳" + fmt.format(equity);
+
+                // Render Charts
+                renderCharts(s.cashIn || 0, s.cashOut || 0, Math.max(0, s.cashInHand || 0), profit, cost);
+
+                notice.style.display = "none";
+            } catch (err) {
+                console.error(err);
+                notice.style.background = "#4c2020";
+                notice.style.color = "#fca5a5";
+                notice.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error loading Balance Sheet: ' + esc(err.message) + '. Please sign in through the admin panel.';
+            }
+        }
+
+        function renderCharts(cashIn, cashOut, cashHand, profit, cost) {
+            if (cashChartObj) cashChartObj.destroy();
+            if (profitChartObj) profitChartObj.destroy();
+
+            cashChartObj = new ApexCharts(document.getElementById("cashChart"), {
+                chart: { type: 'donut', height: 220, background: 'transparent' },
+                theme: { mode: 'dark' },
+                series: [cashIn, cashOut, cashHand],
+                labels: ['Cash In', 'Cash Out', 'In Hand'],
+                colors: ['#6ee7b7', '#fca5a5', '#f5a623'],
+                legend: { position: 'bottom', labels: { colors: '#9bbdab' } },
+                stroke: { width: 0 }
+            });
+            cashChartObj.render();
+
+            profitChartObj = new ApexCharts(document.getElementById("profitChart"), {
+                chart: { type: 'donut', height: 220, background: 'transparent' },
+                theme: { mode: 'dark' },
+                series: [profit, cost],
+                labels: ['Total Profit', 'Total Cost'],
+                colors: ['#6ee7b7', '#fca5a5'],
+                legend: { position: 'bottom', labels: { colors: '#9bbdab' } },
+                stroke: { width: 0 }
+            });
+            profitChartObj.render();
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'pt', 'a4');
+            doc.setFontSize(20);
+            doc.setTextColor(26, 107, 74);
+            doc.text("SBFC Organization — Balance Sheet", 300, 50, { align: 'center' });
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text("Generated: " + new Date().toLocaleDateString(), 300, 70, { align: 'center' });
+
+            doc.autoTable({
+                html: document.querySelector('#finalStatement table'),
+                startY: 90,
+                theme: 'grid',
+                headStyles: { fillColor: [26, 107, 74], textColor: 255 },
+                alternateRowStyles: { fillColor: [245, 250, 247] }
+            });
+            doc.save("SBFC_Balance_Sheet.pdf");
+        }
+
+        async function loadCommonPart(targetId, fileName) {
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            try {
+                const res = await fetch(fileName, { cache: 'no-cache' });
+                if (!res.ok) throw new Error(fileName + ' missing');
+                target.innerHTML = await res.text();
+                target.querySelectorAll('script').forEach((oldScript) => {
+                    const script = document.createElement('script');
+                    [...oldScript.attributes].forEach(attr => script.setAttribute(attr.name, attr.value));
+                    script.textContent = oldScript.textContent;
+                    oldScript.replaceWith(script);
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadCommonPart("common-header", "/header.html");
+            await loadCommonPart("common-footer", "/footer.html");
+            loadBalanceSheet();
+        });
+    </script>
+</body>
+</html>
