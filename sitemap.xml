@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Main pages -->
+  <url>
+    <loc>https://sbfcorgs.com/index.html</loc>
+    <lastmod>2026-05-28</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sbfcorgs.com/index.html"/>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://sbfcorgs.com/bn/index.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://sbfcorgs.com/ar/index.html"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://sbfcorgs.com/hi/index.html"/>
+    <xhtml:link rel="alternate" hreflang="ur" href="https://sbfcorgs.com/ur/index.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sbfcorgs.com/es/index.html"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sbfcorgs.com/fa/index.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sbfcorgs.com/index.html"/>
+  </url>
+  <url>
+    <loc>https://sbfcorgs.com/give.html</loc>
+    <lastmod>2026-05-28</lastmod><changefreq>weekly</changefreq><priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sbfcorgs.com/give.html"/>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://sbfcorgs.com/bn/give.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://sbfcorgs.com/ar/give.html"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://sbfcorgs.com/hi/give.html"/>
+    <xhtml:link rel="alternate" hreflang="ur" href="https://sbfcorgs.com/ur/give.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sbfcorgs.com/es/give.html"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sbfcorgs.com/fa/give.html"/>
+  </url>
+  <url>
+    <loc>https://sbfcorgs.com/about.html</loc>
+    <lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sbfcorgs.com/about.html"/>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://sbfcorgs.com/bn/about.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://sbfcorgs.com/ar/about.html"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://sbfcorgs.com/hi/about.html"/>
+    <xhtml:link rel="alternate" hreflang="ur" href="https://sbfcorgs.com/ur/about.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sbfcorgs.com/es/about.html"/>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://sbfcorgs.com/fa/about.html"/>
+  </url>
+  <url><loc>https://sbfcorgs.com/gallery.html</loc><lastmod>2026-05-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sbfcorgs.com/quran.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sbfcorgs.com/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sbfcorgs.com/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/contact.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Bengali -->
+  <url><loc>https://sbfcorgs.com/bn/index.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/bn/about.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/bn/give.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/bn/contact.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/bn/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/bn/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/bn/gallery.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Arabic -->
+  <url><loc>https://sbfcorgs.com/ar/index.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/ar/about.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/ar/give.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/ar/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/ar/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/ar/contact.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/ar/gallery.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Hindi -->
+  <url><loc>https://sbfcorgs.com/hi/index.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/hi/give.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/hi/about.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/hi/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/hi/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Urdu -->
+  <url><loc>https://sbfcorgs.com/ur/index.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/ur/give.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/ur/about.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/ur/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/ur/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Spanish -->
+  <url><loc>https://sbfcorgs.com/es/index.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/es/give.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/es/about.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/es/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/es/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Persian -->
+  <url><loc>https://sbfcorgs.com/fa/index.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sbfcorgs.com/fa/give.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sbfcorgs.com/fa/about.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/fa/history.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sbfcorgs.com/fa/founder.html</loc><lastmod>2026-05-28</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+</urlset>
+
+

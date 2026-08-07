@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عطیہ دیں | SBFC Organization</title>
+<link rel="canonical" href="https://sbfcorgs.com/ur/give.html">
+<link rel="icon" type="image/png" href="/images/logo.png">
+<link rel="stylesheet" href="/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<div id="common-header"></div>
+
+<main>
+<section class="page-hero">
+  <div class="section-tag">SBFC Organization</div>
+  <h1 class="section-heading" style="font-size:clamp(32px,5vw,56px);color:var(--white);">عطیہ دیں — زندگی بدلیں</h1>
+  <p style="color:var(--text-muted);font-size:16px;max-width:580px;margin-top:14px;text-align:center;">آپ کا ایک چھوٹا سا عطیہ کسی کی زندگی بدل سکتا ہے۔</p>
+</section>
+
+<section>
+  <div class="glass-card fade-in" style="max-width:800px;margin:0 auto;padding:32px;text-align:center;">
+    <i class="fas fa-heart" style="font-size:36px;color:var(--accent);margin-bottom:16px;"></i>
+    <h3 style="font-family:var(--ff-head);color:var(--white);font-size:22px;margin-bottom:12px;">عطیہ دیں</h3>
+    <p style="color:var(--text-muted);font-size:14px;line-height:1.8;">آپ کا ایک چھوٹا سا عطیہ کسی کی زندگی بدل سکتا ہے۔</p>
+    <div style="margin-top:24px;">
+      <a href="/ur/give.html" class="btn-primary"><i class="fas fa-heart"></i> عطیہ دیں</a>
+      <a href="/ur/contact.html" class="btn-secondary" style="margin-left:10px;"><i class="fas fa-envelope"></i> رابطہ</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<div id="common-footer"></div>
+
+<script>
+async function loadCommonPart(targetId, fileName) {
+  const target = document.getElementById(targetId);
+  try {
+    const response = await fetch(fileName, { cache: 'no-cache' });
+    if (!response.ok) throw new Error(fileName + ' could not be loaded');
+    target.innerHTML = await response.text();
+    target.querySelectorAll('script').forEach((oldScript) => {
+      const script = document.createElement('script');
+      [...oldScript.attributes].forEach((attribute) => script.setAttribute(attribute.name, attribute.value));
+      script.textContent = oldScript.textContent;
+      oldScript.replaceWith(script);
+    });
+  } catch (error) { console.error(error); }
+}
+
+async function loadCommonLayout() {
+  await loadCommonPart('common-header', '/header.html');
+  await loadCommonPart('common-footer', '/footer.html');
+}
+
+document.addEventListener('DOMContentLoaded', loadCommonLayout);
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery Upload (Demo) | SBFC</title>
+<title>Gallery Upload | SBFC</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -158,6 +158,13 @@ body{font-family:var(--ff-body);background:var(--dark);color:var(--white);min-he
       <div class="login-err" id="loginErr"><i class="fas fa-circle-exclamation"></i> Incorrect password.</div>
       <form onsubmit="doLogin(event)">
         <div class="form-group">
+          <label>Username</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="text" id="userInput" placeholder="Enter username" required>
+          </div>
+        </div>
+        <div class="form-group">
           <label>Password</label>
           <div class="input-wrap">
             <span class="input-icon"><i class="fas fa-lock"></i></span>
@@ -168,7 +175,7 @@ body{font-family:var(--ff-body);background:var(--dark);color:var(--white);min-he
           <i class="fas fa-right-to-bracket"></i> <span id="loginBtnText">Sign In as Admin</span>
         </button>
       </form>
-      <p class="hint">Demo passwords — Admin: <code>admin123</code> &nbsp;·&nbsp; User: <code>user123</code></p>
+      <p class="hint">Use your SBFC administrator or user account.</p>
     </div>
   </div>
 </div>
@@ -252,7 +259,7 @@ const maxFileSize    = 8 * 1024 * 1024; // 8MB — browser memory demo limit
 let selectedRole = 'admin';
 let currentRole  = null;      // set after successful login
 let queueFiles   = [];        // files staged, not yet added to gallery
-let mediaItems   = [];        // { id, name, ext, type:'image'|'doc', dataUrl, size, category }
+let mediaItems   = JSON.parse(localStorage.getItem('sbfc_gallery_items') || '[]');        // { id, name, ext, type:'image'|'doc', dataUrl, size, category }
 let nextId       = 1;
 let activeFilter = 'all';
 
@@ -267,28 +274,24 @@ function selectRole(role) {
 }
 
 /* ── Login ── */
-function doLogin(e) {
+async function doLogin(e) {
   e.preventDefault();
-  const pass = document.getElementById('passInput').value;
-  const expected = selectedRole === 'admin' ? ADMIN_PASSWORD : USER_PASSWORD;
-  if (pass === expected) {
-    currentRole = selectedRole;
-    document.getElementById('loginErr').style.display = 'none';
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('appWrap').style.display = 'block';
-    const badge = document.getElementById('roleBadge');
-    badge.textContent = currentRole === 'admin' ? 'Administrator' : 'View Only';
-    badge.className = 'role-badge ' + currentRole;
-    document.getElementById('uploadCard').style.display = currentRole === 'admin' ? 'block' : 'none';
-    renderGallery();
-  } else {
-    document.getElementById('loginErr').style.display = 'flex';
-  }
+  const username = document.getElementById('userInput').value.trim();
+  const password = document.getElementById('passInput').value;
+  try {
+    const r = await fetch('/api/login', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username,password})});
+    const d = await r.json(); if (!r.ok) throw Error(d.error || 'Login failed.');
+    currentRole = d.role || selectedRole;
+    document.getElementById('loginErr').style.display = 'none'; document.getElementById('loginWrap').style.display = 'none'; document.getElementById('appWrap').style.display = 'block';
+    const badge = document.getElementById('roleBadge'); badge.textContent = currentRole === 'admin' ? 'Administrator' : 'View Only'; badge.className = 'role-badge ' + currentRole;
+    document.getElementById('uploadCard').style.display = currentRole === 'admin' ? 'block' : 'none'; renderGallery();
+  } catch (error) { document.getElementById('loginErr').textContent = error.message; document.getElementById('loginErr').style.display='flex'; }
 }
-
-function logout() {
+async function logout() {
+  await fetch('/api/logout', {method:'POST',credentials:'include'}).catch(()=>{});
   currentRole = null;
   document.getElementById('passInput').value = '';
+  document.getElementById('userInput').value = '';
   document.getElementById('appWrap').style.display = 'none';
   document.getElementById('loginWrap').style.display = 'flex';
 }
@@ -330,7 +333,7 @@ function renderQueue() {
     const div = document.createElement('div');
     div.className = 'qi';
     const thumbHtml = isImg
-      ? `<img class="qi-thumb" id="qt_${i}" alt="">`
+      ? `<img class="qi-thumb" id="qt_${i}" alt="" onerror="this.onerror=null;this.src='images/logo.png';">`
       : `<div class="qi-icon"><i class="fas fa-file-lines"></i></div>`;
     div.innerHTML = `
       ${thumbHtml}
@@ -363,7 +366,7 @@ function clearQueue() { queueFiles = []; renderQueue(); }
 function escHtml(s) { return s.replace(/[<>"'&]/g, ''); }
 function fmtSize(b) { return b >= 1048576 ? (b/1048576).toFixed(1)+' MB' : Math.round(b/1024)+' KB'; }
 
-/* ── Add staged files into the (in-memory) gallery ── */
+/* ── Add staged files into browser gallery storage ── */
 function addToGallery() {
   if (!queueFiles.length) return;
   let remaining = queueFiles.length;
@@ -386,6 +389,7 @@ function addToGallery() {
       remaining--;
       if (remaining === 0) {
         clearQueue();
+        saveGallery();
         renderGallery();
         addMsgAlert(`${queueFiles.length || ''} Upload complete.`, true);
       }
@@ -410,6 +414,8 @@ function setFilter(f) {
   renderGallery();
 }
 
+function saveGallery() { localStorage.setItem('sbfc_gallery_items', JSON.stringify(mediaItems)); }
+
 function renderGallery() {
   const grid = document.getElementById('galleryGrid');
   const empty = document.getElementById('emptyState');
@@ -423,7 +429,7 @@ function renderGallery() {
     const card = document.createElement('div');
     card.className = 'g-item';
     const thumb = m.type === 'image'
-      ? `<img class="g-thumb" src="${m.dataUrl}" alt="">`
+      ? `<img class="g-thumb" src="${m.dataUrl}" alt="" onerror="this.onerror=null;this.src='images/logo.png';">`
       : `<div class="g-doc"><i class="fas fa-file-${docIcon(m.ext)}"></i><span>.${m.ext}</span></div>`;
     const delBtn = currentRole === 'admin'
       ? `<button class="g-del" onclick="deleteItem(${m.id})"><i class="fas fa-trash"></i></button>`
@@ -460,6 +466,7 @@ function docIcon(ext) {
 
 function deleteItem(id) {
   mediaItems = mediaItems.filter(m => m.id !== id);
+  saveGallery();
   renderGallery();
 }
 
