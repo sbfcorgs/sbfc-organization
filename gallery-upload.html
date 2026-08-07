@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery Upload (Demo) | SBFC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --accent:#22c55e;--gold:#e8a020;--dark:#060d09;--card:#0f1f14;
+  --border:rgba(255,255,255,0.08);--muted:rgba(255,255,255,0.4);--white:#ffffff;
+  --ff-head:'Playfair Display',serif;--ff-body:'DM Sans',sans-serif;
+}
+body{font-family:var(--ff-body);background:var(--dark);color:var(--white);min-height:100vh;}
+
+/* ══ Demo banner ══ */
+.demo-banner{
+  background:rgba(232,160,32,.1);border-bottom:1px solid rgba(232,160,32,.25);
+  color:var(--gold);text-align:center;font-size:12.5px;padding:9px 14px;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+}
+
+/* ══ Login screen ══ */
+.login-wrap{min-height:calc(100vh - 40px);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-inner{width:100%;max-width:440px;}
+.login-header{text-align:center;margin-bottom:26px;}
+.logo-ring{display:inline-flex;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.03));border:1.5px solid rgba(34,197,94,.3);margin-bottom:16px;}
+.logo-ring i{font-size:28px;color:var(--accent);}
+.login-header h1{font-family:var(--ff-head);font-size:26px;font-weight:800;margin-bottom:6px;}
+.login-header p{font-size:12.5px;color:var(--muted);}
+.role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.role-tab{padding:14px 10px;border-radius:14px;border:1.5px solid var(--border);background:rgba(255,255,255,.02);cursor:pointer;text-align:center;transition:.2s;}
+.role-tab i{font-size:20px;margin-bottom:6px;display:block;}
+.role-tab .tn{font-size:13px;font-weight:700;display:block;}
+.role-tab small{font-size:10px;color:var(--muted);display:block;margin-top:2px;}
+.role-tab.active-admin{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.07);}
+.role-tab.active-user{border-color:rgba(96,165,250,.45);background:rgba(96,165,250,.07);}
+.login-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px 28px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.7px;}
+.input-wrap{position:relative;}
+.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
+.form-group input{width:100%;padding:12px 14px 12px 40px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--white);font-family:var(--ff-body);font-size:14px;outline:none;transition:.2s;}
+.form-group input:focus{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.03);}
+.btn-login{width:100%;padding:13px;border:none;border-radius:12px;font-size:14.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;}
+.btn-admin{background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;}
+.btn-user{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;}
+.login-err{background:rgba(252,165,165,.08);border:1px solid rgba(252,165,165,.2);color:#fca5a5;border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;display:none;}
+.hint{text-align:center;font-size:11px;color:rgba(255,255,255,.25);margin-top:14px;}
+
+/* ══ App shell ══ */
+#appWrap{display:none;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 26px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--ff-head);font-size:17px;}
+.brand i{color:var(--accent);}
+.role-badge{font-size:11px;padding:4px 11px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.role-badge.admin{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25);}
+.role-badge.user{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid rgba(96,165,250,.25);}
+.btn-logout{background:rgba(252,165,165,.1);border:1px solid rgba(252,165,165,.25);color:#fca5a5;padding:8px 14px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.btn-logout:hover{background:rgba(252,165,165,.18);}
+
+.content{max-width:1100px;margin:0 auto;padding:28px 22px 60px;}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:30px;}
+.stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
+.stat-n{font-family:var(--ff-head);font-size:26px;color:var(--gold);}
+.stat-l{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* Upload card (admin only) */
+.ucard{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:32px;}
+.ucard-h{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.ucard-h i{color:var(--accent);}
+.drop{border:2px dashed var(--border);border-radius:14px;padding:34px 16px;text-align:center;cursor:pointer;transition:.2s;position:relative;}
+.drop.over{border-color:var(--accent);background:rgba(34,197,94,.04);}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.drop-ico{font-size:28px;color:var(--muted);margin-bottom:8px;}
+.drop-t{font-size:14px;font-weight:600;}
+.drop-s{font-size:11.5px;color:var(--muted);margin-top:4px;}
+
+.queue{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+.qi{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:10px;}
+.qi-thumb,.qi-icon{width:52px;height:52px;border-radius:9px;object-fit:cover;flex-shrink:0;}
+.qi-icon{display:flex;align-items:center;justify-content:center;background:rgba(232,160,32,.1);color:var(--gold);font-size:20px;}
+.qi-meta{flex:1;min-width:0;}
+.qi-ni{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:7px;padding:6px 9px;color:var(--white);font-size:12.5px;margin-bottom:6px;font-family:var(--ff-body);}
+.qi-sel{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:7px;padding:5px 8px;color:var(--white);font-size:11.5px;font-family:var(--ff-body);}
+.qi-size{font-size:10.5px;color:var(--muted);margin-left:8px;}
+.qi-rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:6px;flex-shrink:0;}
+.qi-rm:hover{color:#fca5a5;}
+
+.ubtn-row{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap;}
+.btn-up{background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;border:none;padding:11px 20px;border-radius:11px;font-weight:700;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.btn-up:disabled{opacity:.4;cursor:not-allowed;}
+.pill{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);padding:9px 15px;border-radius:10px;font-size:12.5px;cursor:pointer;font-family:var(--ff-body);}
+.pill:hover{color:var(--white);}
+.badge-count{font-size:12px;color:var(--muted);}
+
+/* Gallery */
+.gallery-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.filter-tabs{display:flex;gap:8px;}
+.ftab{background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-size:12px;cursor:pointer;}
+.ftab.active{background:rgba(232,160,32,.1);border-color:rgba(232,160,32,.3);color:var(--gold);}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;}
+.g-item{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;transition:.2s;}
+.g-item:hover{border-color:rgba(232,160,32,.25);}
+.g-thumb{width:100%;height:130px;object-fit:cover;display:block;background:rgba(255,255,255,.03);}
+.g-doc{width:100%;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.03);color:var(--gold);}
+.g-doc i{font-size:32px;}
+.g-doc span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.g-info{padding:10px 12px;}
+.g-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.g-meta{font-size:10.5px;color:var(--muted);margin-top:3px;display:flex;justify-content:space-between;}
+.g-cat{display:inline-block;font-size:9.5px;padding:2px 7px;border-radius:10px;margin-top:6px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.g-cat.event{background:rgba(249,115,22,.12);color:#fb923c;}
+.g-cat.community{background:rgba(34,197,94,.1);color:#4ade80;}
+.g-cat.document{background:rgba(96,165,250,.1);color:#60a5fa;}
+.g-del{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);border:none;color:#fca5a5;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.g-del:hover{background:rgba(239,68,68,.3);}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state i{font-size:36px;opacity:.4;margin-bottom:12px;display:block;}
+
+@media(max-width:600px){ .stats{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">
+  <i class="fas fa-circle-info"></i>
+  Demo Mode — uploaded files live only in this browser tab. Refreshing the page clears everything. No server, no real login security.
+</div>
+
+<!-- ══════════════ LOGIN SCREEN ══════════════ -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-inner">
+    <div class="login-header">
+      <div class="logo-ring"><i class="fas fa-images"></i></div>
+      <h1>Gallery Upload</h1>
+      <p>SBFC Organization &nbsp;·&nbsp; Sign in to continue</p>
+    </div>
+
+    <div class="role-tabs">
+      <div class="role-tab active-admin" id="tabAdmin" onclick="selectRole('admin')">
+        <i class="fas fa-shield-halved" style="color:#4ade80;"></i>
+        <span class="tn" style="color:#4ade80;">Admin</span>
+        <small>Upload &amp; Delete</small>
+      </div>
+      <div class="role-tab" id="tabUser" onclick="selectRole('user')">
+        <i class="fas fa-user-circle" style="color:#60a5fa;"></i>
+        <span class="tn" style="color:#60a5fa;">User</span>
+        <small>View Only</small>
+      </div>
+    </div>
+
+    <div class="login-card">
+      <div class="login-err" id="loginErr"><i class="fas fa-circle-exclamation"></i> Incorrect password.</div>
+      <form onsubmit="doLogin(event)">
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" id="passInput" placeholder="Enter password" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-login btn-admin" id="loginBtn">
+          <i class="fas fa-right-to-bracket"></i> <span id="loginBtnText">Sign In as Admin</span>
+        </button>
+      </form>
+      <p class="hint">Demo passwords — Admin: <code>admin123</code> &nbsp;·&nbsp; User: <code>user123</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MAIN APP (after login) ══════════════ -->
+<div id="appWrap">
+  <div class="topbar">
+    <div class="brand"><i class="fas fa-images"></i> SBFC Gallery</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="role-badge" id="roleBadge"></span>
+      <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="statImages">0</div><div class="stat-l">Images</div></div>
+      <div class="stat"><div class="stat-n" id="statDocs">0</div><div class="stat-l">Documents</div></div>
+      <div class="stat"><div class="stat-n" id="statEvent">0</div><div class="stat-l">Event</div></div>
+      <div class="stat"><div class="stat-n" id="statCommunity">0</div><div class="stat-l">Community</div></div>
+    </div>
+
+    <!-- UPLOAD CARD (admin only) -->
+    <div class="ucard" id="uploadCard">
+      <div class="ucard-h"><i class="fas fa-cloud-upload-alt"></i> Upload New Media</div>
+
+      <div class="drop" id="drop">
+        <input type="file" id="fileIn" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" multiple>
+        <div class="drop-ico"><i class="fas fa-cloud-upload-alt"></i></div>
+        <div class="drop-t">Drop files here or click to browse</div>
+        <div class="drop-s">Images &amp; Documents (PDF, Word, Excel, PPT, TXT) · Max 8 MB each (browser memory demo)</div>
+      </div>
+
+      <div class="queue" id="queue"></div>
+
+      <div class="ubtn-row">
+        <button class="btn-up" id="upBtn" disabled onclick="addToGallery()">
+          <i class="fas fa-upload"></i> Add to Gallery
+        </button>
+        <span class="badge-count" id="qBadge">No files selected</span>
+        <button class="pill" style="margin-left:auto" onclick="clearQueue()"><i class="fas fa-times"></i> Clear</button>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery-head">
+      <div style="font-family:var(--ff-head);font-size:17px;">Gallery</div>
+      <div class="filter-tabs">
+        <div class="ftab active" data-f="all" onclick="setFilter('all')">All</div>
+        <div class="ftab" data-f="image" onclick="setFilter('image')">Images</div>
+        <div class="ftab" data-f="doc" onclick="setFilter('doc')">Documents</div>
+      </div>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <i class="fas fa-images"></i>
+      Nothing uploaded yet.
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   DEMO ONLY — client-side, in-memory, no backend.
+   Passwords are hardcoded in this file and visible to anyone who
+   views source — this is NOT real security. For production, use
+   the PHP version with server-side sessions + a real database.
+   ══════════════════════════════════════════════════════════════ */
+
+const ADMIN_PASSWORD = 'admin123';
+const USER_PASSWORD  = 'user123';
+
+const allowedImages = ['jpg','jpeg','png','gif','webp'];
+const allowedDocs    = ['pdf','doc','docx','xls','xlsx','ppt','pptx','txt'];
+const maxFileSize    = 8 * 1024 * 1024; // 8MB — browser memory demo limit
+
+let selectedRole = 'admin';
+let currentRole  = null;      // set after successful login
+let queueFiles   = [];        // files staged, not yet added to gallery
+let mediaItems   = [];        // { id, name, ext, type:'image'|'doc', dataUrl, size, category }
+let nextId       = 1;
+let activeFilter = 'all';
+
+/* ── Role tab toggle (login screen) ── */
+function selectRole(role) {
+  selectedRole = role;
+  document.getElementById('tabAdmin').className = role === 'admin' ? 'role-tab active-admin' : 'role-tab';
+  document.getElementById('tabUser').className  = role === 'user'  ? 'role-tab active-user'  : 'role-tab';
+  const btn = document.getElementById('loginBtn');
+  btn.className = role === 'admin' ? 'btn-login btn-admin' : 'btn-login btn-user';
+  document.getElementById('loginBtnText').textContent = role === 'admin' ? 'Sign In as Admin' : 'Sign In as User';
+}
+
+/* ── Login ── */
+function doLogin(e) {
+  e.preventDefault();
+  const pass = document.getElementById('passInput').value;
+  const expected = selectedRole === 'admin' ? ADMIN_PASSWORD : USER_PASSWORD;
+  if (pass === expected) {
+    currentRole = selectedRole;
+    document.getElementById('loginErr').style.display = 'none';
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('appWrap').style.display = 'block';
+    const badge = document.getElementById('roleBadge');
+    badge.textContent = currentRole === 'admin' ? 'Administrator' : 'View Only';
+    badge.className = 'role-badge ' + currentRole;
+    document.getElementById('uploadCard').style.display = currentRole === 'admin' ? 'block' : 'none';
+    renderGallery();
+  } else {
+    document.getElementById('loginErr').style.display = 'flex';
+  }
+}
+
+function logout() {
+  currentRole = null;
+  document.getElementById('passInput').value = '';
+  document.getElementById('appWrap').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'flex';
+}
+
+/* ── Drag & drop / file picker ── */
+const drop   = document.getElementById('drop');
+const fileIn = document.getElementById('fileIn');
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => { if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+fileIn.addEventListener('change', () => { if (fileIn.files.length) addFiles(fileIn.files); });
+
+function extOf(name) { return name.split('.').pop().toLowerCase(); }
+
+function addFiles(files) {
+  Array.from(files).forEach(f => {
+    const ext = extOf(f.name);
+    if (!allowedImages.includes(ext) && !allowedDocs.includes(ext)) {
+      addMsgAlert(`Skipped "${f.name}" — file type not allowed.`);
+      return;
+    }
+    if (f.size > maxFileSize) {
+      addMsgAlert(`Skipped "${f.name}" — exceeds 8 MB demo limit.`);
+      return;
+    }
+    if (!queueFiles.find(x => x.name === f.name && x.size === f.size)) {
+      queueFiles.push(f);
+    }
+  });
+  renderQueue();
+}
+
+function renderQueue() {
+  const q = document.getElementById('queue');
+  q.innerHTML = '';
+  queueFiles.forEach((f, i) => {
+    const ext = extOf(f.name);
+    const isImg = allowedImages.includes(ext);
+    const div = document.createElement('div');
+    div.className = 'qi';
+    const thumbHtml = isImg
+      ? `<img class="qi-thumb" id="qt_${i}" alt="">`
+      : `<div class="qi-icon"><i class="fas fa-file-lines"></i></div>`;
+    div.innerHTML = `
+      ${thumbHtml}
+      <div class="qi-meta">
+        <input class="qi-ni" id="qn_${i}" type="text" value="${escHtml(f.name.replace(/\.[^.]+$/, ''))}">
+        <select class="qi-sel" id="qc_${i}">
+          <option value="community">Community</option>
+          <option value="event">Event</option>
+          ${!isImg ? '<option value="document" selected>Document</option>' : ''}
+        </select>
+        <span class="qi-size">${fmtSize(f.size)}</span>
+      </div>
+      <button class="qi-rm" onclick="removeQueueFile(${i})">✕</button>`;
+    q.appendChild(div);
+    if (isImg) loadQueueThumb(f, i);
+  });
+  const n = queueFiles.length;
+  document.getElementById('upBtn').disabled = n === 0;
+  document.getElementById('qBadge').textContent = n ? `${n} file${n>1?'s':''} staged` : 'No files selected';
+}
+
+function loadQueueThumb(file, i) {
+  const reader = new FileReader();
+  reader.onload = e => { const img = document.getElementById('qt_'+i); if (img) img.src = e.target.result; };
+  reader.readAsDataURL(file);
+}
+
+function removeQueueFile(i) { queueFiles.splice(i,1); renderQueue(); }
+function clearQueue() { queueFiles = []; renderQueue(); }
+function escHtml(s) { return s.replace(/[<>"'&]/g, ''); }
+function fmtSize(b) { return b >= 1048576 ? (b/1048576).toFixed(1)+' MB' : Math.round(b/1024)+' KB'; }
+
+/* ── Add staged files into the (in-memory) gallery ── */
+function addToGallery() {
+  if (!queueFiles.length) return;
+  let remaining = queueFiles.length;
+  queueFiles.forEach((f, i) => {
+    const ext  = extOf(f.name);
+    const isImg = allowedImages.includes(ext);
+    const name  = document.getElementById('qn_'+i)?.value || f.name;
+    const cat   = document.getElementById('qc_'+i)?.value || 'community';
+    const reader = new FileReader();
+    reader.onload = e => {
+      mediaItems.unshift({
+        id: nextId++,
+        name: name,
+        ext: ext,
+        type: isImg ? 'image' : 'doc',
+        dataUrl: e.target.result,
+        size: fmtSize(f.size),
+        category: cat
+      });
+      remaining--;
+      if (remaining === 0) {
+        clearQueue();
+        renderGallery();
+        addMsgAlert(`${queueFiles.length || ''} Upload complete.`, true);
+      }
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+function addMsgAlert(txt, ok) {
+  // lightweight inline toast
+  const d = document.createElement('div');
+  d.textContent = txt;
+  d.style.cssText = `position:fixed;bottom:20px;right:20px;background:${ok?'rgba(34,197,94,.15)':'rgba(252,165,165,.15)'};border:1px solid ${ok?'rgba(34,197,94,.35)':'rgba(252,165,165,.35)'};color:${ok?'#4ade80':'#fca5a5'};padding:10px 16px;border-radius:10px;font-size:12.5px;z-index:999;`;
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 3500);
+}
+
+/* ── Gallery rendering ── */
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.ftab').forEach(el => el.classList.toggle('active', el.dataset.f === f));
+  renderGallery();
+}
+
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  const empty = document.getElementById('emptyState');
+  let items = mediaItems;
+  if (activeFilter !== 'all') items = items.filter(m => m.type === activeFilter);
+
+  grid.innerHTML = '';
+  empty.style.display = items.length ? 'none' : 'block';
+
+  items.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'g-item';
+    const thumb = m.type === 'image'
+      ? `<img class="g-thumb" src="${m.dataUrl}" alt="">`
+      : `<div class="g-doc"><i class="fas fa-file-${docIcon(m.ext)}"></i><span>.${m.ext}</span></div>`;
+    const delBtn = currentRole === 'admin'
+      ? `<button class="g-del" onclick="deleteItem(${m.id})"><i class="fas fa-trash"></i></button>`
+      : '';
+    card.innerHTML = `
+      <a href="${m.dataUrl}" download="${escHtml(m.name)}.${m.ext}" target="_blank" style="text-decoration:none;color:inherit;">
+        ${thumb}
+      </a>
+      ${delBtn}
+      <div class="g-info">
+        <div class="g-name">${escHtml(m.name)}</div>
+        <div class="g-meta"><span>${m.size}</span><span>.${m.ext}</span></div>
+        <span class="g-cat ${m.category}">${m.category}</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  // stats
+  const imgs = mediaItems.filter(m => m.type === 'image');
+  const docs = mediaItems.filter(m => m.type === 'doc');
+  document.getElementById('statImages').textContent = imgs.length;
+  document.getElementById('statDocs').textContent = docs.length;
+  document.getElementById('statEvent').textContent = mediaItems.filter(m => m.category === 'event').length;
+  document.getElementById('statCommunity').textContent = mediaItems.filter(m => m.category === 'community').length;
+}
+
+function docIcon(ext) {
+  if (ext === 'pdf') return 'pdf';
+  if (['doc','docx'].includes(ext)) return 'word';
+  if (['xls','xlsx'].includes(ext)) return 'excel';
+  if (['ppt','pptx'].includes(ext)) return 'powerpoint';
+  return 'lines';
+}
+
+function deleteItem(id) {
+  mediaItems = mediaItems.filter(m => m.id !== id);
+  renderGallery();
+}
+
+/* init */
+selectRole('admin');
+</script>
+
+</body>
+</html>
