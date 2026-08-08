@@ -6,7 +6,7 @@
 <div id="common-header"></div><main><div class="printhead"><h2>SBFC Organization â€” Savings Report</h2><p id="printDate"></p></div><header class="top"><a href="/" style="color:#b7e4c7;text-decoration:none;font-size:13px">â† SBFC Home</a><div><span class="badge">â–¦ Savings &amp; Finance</span><h1>Savings Report</h1><div class="meta">Full financial analysis â€” select an amount for transaction history</div></div><button class="print" onclick="window.print()">âŽ™ Print / PDF</button></header><div id="app"><div class="loading">Loading savings reportâ€¦</div></div></main><div id="modal" onclick="if(event.target===this)closeHistory()"><div class="modalbox" role="dialog" aria-modal="true" aria-labelledby="historyTitle"><div class="modalhead"><h2 id="historyTitle">Transaction History</h2><button class="close" onclick="closeHistory()" aria-label="Close">Ã—</button></div><div class="modalbody" id="historyBody">Loadingâ€¦</div></div></div>
 <script>
 /* Cloudflare Worker API URL added for live D1 Database connection */
-const API_BASE = 'https://sbfc-organization.sbfcorgs.workers.dev'; 
+const API_BASE = ''; 
 let reportData; 
 const money=x=>Number(x||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); 
 const esc=x=>String(x??'â€”').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); 

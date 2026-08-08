@@ -76,6 +76,14 @@ window.SBFC_VISITOR_COUNTER_URL =
 
   if (!totalElement || !onlineElement) return;
 
+  // Local preview: skip the remote counter so no CORS/network errors show offline.
+  var host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1' || host === '') {
+    totalElement.textContent = '—';
+    onlineElement.textContent = '—';
+    return;
+  }
+
   fetch(window.SBFC_VISITOR_COUNTER_URL, {
     method: 'GET',
     credentials: 'include',

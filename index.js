@@ -398,6 +398,27 @@ async function handleSavingsHistory(request, env) {
 }
 
 
+// Public homepage stats — no auth required (the dashboard endpoint is admin-only).
+async function handlePublicStats(request, env) {
+  try {
+    const [membersResult, donationsResult, approvedResult] = await env.DB.batch([
+      env.DB.prepare(`SELECT COUNT(*) AS total FROM sbfc_members WHERE status = 'active'`),
+      env.DB.prepare(`SELECT COUNT(*) AS total FROM donations`),
+      env.DB.prepare(`SELECT COUNT(*) AS total FROM donations WHERE status = 'approved'`),
+    ]);
+    const num = (r) => Number(r.results?.[0]?.total) || 0;
+    return json({
+      ok: true,
+      memberCount: num(membersResult),
+      donationCount: num(donationsResult),
+      approvedCount: num(approvedResult),
+    });
+  } catch (error) {
+    console.error("Public stats API error:", error);
+    return json({ ok: false, error: "Stats could not be loaded." }, 500);
+  }
+}
+
 async function handlePublicContact(request, env) {
   try { const b=await request.json(); const name=String(b.name||'').trim(), email=String(b.email||'').trim(), subject=String(b.subject||'').trim(), message=String(b.message||'').trim();
     if(!name||!email||!subject||!message) return json({ok:false,error:'Please complete all fields.'},400);
@@ -471,6 +492,8 @@ export default {
       return withCors(await handleMe(request, env), request);
     if (url.pathname === "/api/contact" && request.method === "POST")
       return withCors(await handlePublicContact(request, env), request);
+    if (url.pathname === "/api/stats" && request.method === "GET")
+      return withCors(await handlePublicStats(request, env), request);
     if (url.pathname === "/api/donations" && request.method === "POST")
       return withCors(await handlePublicDonation(request, env), request);
     if (url.pathname === "/api/savings-members" && request.method === "GET") return withCors(await handleSavingsMembers(request, env), request);

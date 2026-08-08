@@ -4,7 +4,7 @@
 
     <div class="footer-brand">
       <div class="fb-logo" style="margin-bottom:10px!important;">
-        <img src="../images/default_avatar.svg" alt="SBFC Logo" style="width:36px;height:36px;">
+        <img src="images/default_avatar.svg" alt="SBFC Logo" style="width:36px;height:36px;">
         <span class="fb-name" style="font-size:16px;">SBFC Organization</span>
       </div>
       <p style="font-size:12px;line-height:1.6;">Dedicated to building stronger communities and empowering lives since 1998. Together we make a difference.</p>
@@ -75,6 +75,14 @@ window.SBFC_VISITOR_COUNTER_URL =
   var onlineElement = document.getElementById('vc-online');
 
   if (!totalElement || !onlineElement) return;
+
+  // Local preview: skip the remote counter so no CORS/network errors show offline.
+  var host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1' || host === '') {
+    totalElement.textContent = '—';
+    onlineElement.textContent = '—';
+    return;
+  }
 
   fetch(window.SBFC_VISITOR_COUNTER_URL, {
     method: 'GET',

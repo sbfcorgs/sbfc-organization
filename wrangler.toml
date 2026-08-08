@@ -1,0 +1,23 @@
+# SBFC Organization — Cloudflare Worker + Static Assets + D1
+# Deploys the whole site AND the /api/* backend from this folder.
+#
+# Steps (see DEPLOY.md):
+#   1. npx wrangler login
+#   2. npx wrangler d1 create sbfc            -> copy the database_id below
+#   3. npx wrangler d1 execute sbfc --remote --file=./schema.sql
+#   4. npx wrangler deploy
+#
+# Everything is same-origin: the public pages and the admin panel call /api/*
+# on the same host, so no CORS config is needed.
+
+name = "sbfc-organization"
+main = "index.js"
+compatibility_date = "2026-08-08"
+
+# Serve the static site from this folder; let the Worker handle /api/* first.
+assets = { directory = ".", run_worker_first = true }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sbfc"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

@@ -441,7 +441,44 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"d360367b0e84435a9f0de3b2f47b62bc","r":1}' crossorigin="anonymous"></script>
+<script>
+if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '') {
+  var cfScript = document.createElement('script');
+  cfScript.type = 'module';
+  cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496';
+  cfScript.integrity = 'sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==';
+  cfScript.crossOrigin = 'anonymous';
+  cfScript.setAttribute('data-cf-beacon', '{"version":"2024.11.0","token":"d360367b0e84435a9f0de3b2f47b62bc","r":1}');
+  document.head.appendChild(cfScript);
+}
+</script>
+<script>
+/* Donation confirm -> Worker /api/donations (original API) */
+(function () {
+  var form = document.querySelector('[data-sbfc-donation]');
+  if (!form) return;
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var original = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+    try {
+      var body = Object.fromEntries(new FormData(form).entries());
+      var res = await fetch('/api/donations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      var data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Donation could not be submitted.');
+      form.innerHTML = '<div style="text-align:center;padding:20px;color:#4ade80;font-weight:700;">✓ Donation submitted! Our team will verify your payment shortly.</div>';
+    } catch (err) {
+      alert(err.message || 'Donation could not be submitted. Please try again.');
+      if (btn) { btn.disabled = false; btn.textContent = original; }
+    }
+  });
+})();
+</script>
 </body>
 </html>
 

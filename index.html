@@ -222,7 +222,7 @@
 <div id="common-footer"></div>
 
 <script>
-const API_BASE = "https://sbfc-organization.sbfcorgs.workers.dev";
+const API_BASE = "";
 
 function animateCount(el, target, suffix = "") {
     if (!el) return;
@@ -237,7 +237,7 @@ function animateCount(el, target, suffix = "") {
 
 async function loadLiveStats() {
     try {
-        const res = await fetch(API_BASE + "/api/dashboard", {
+        const res = await fetch(API_BASE + "/api/stats", {
             credentials: "omit",
             cache: "no-store"
         });
@@ -245,11 +245,9 @@ async function loadLiveStats() {
         const data = await res.json();
         if (!data || !data.ok) throw new Error(data?.error || "Invalid response");
 
-        const s = data.savings || {};
-        const d = data.donations || [];
-        const memberCount = s.memberCount || s.totalMembers || 248;
-        const donationCount = d.length || data.donationStats?.total || 5000;
-        const approvedCount = data.donationStats?.approved || 4850;
+        const memberCount = data.memberCount || 248;
+        const donationCount = data.donationCount || 5000;
+        const approvedCount = data.approvedCount || donationCount;
 
         const elMembers = document.getElementById("statMembers");
         const elDonations = document.getElementById("statDonations");
@@ -266,14 +264,17 @@ async function loadLiveStats() {
             liveText.innerHTML = `Live data: <strong style="color:#4ade80;">${memberCount} active members</strong> · <strong style="color:#4ade80;">${donationCount} donations received</strong> · <strong style="color:#4ade80;">${approvedCount} approved</strong> — updated just now`;
         }
     } catch (err) {
-        console.info("Live stats operating on fallback mode:", err.message);
-        const liveText = document.getElementById("liveStatText");
-        if (liveText) {
-            liveText.innerHTML = `Live data: <strong style="color:#4ade80;">248 active members</strong> · <strong style="color:#4ade80;">5000+ donations received</strong>`;
-        }
-        ["statMembers", "impactMembers"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = "248+"; });
-        ["statDonations", "impactDonations"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = "5000+"; });
+        applyFallbackStats();
     }
+}
+
+function applyFallbackStats() {
+    const liveText = document.getElementById("liveStatText");
+    if (liveText) {
+        liveText.innerHTML = `Live data: <strong style="color:#4ade80;">248 active members</strong> · <strong style="color:#4ade80;">5000+ donations received</strong>`;
+    }
+    ["statMembers", "impactMembers"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = "248+"; });
+    ["statDonations", "impactDonations"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = "5000+"; });
 }
 
 function initFadeIn() {
@@ -344,6 +345,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loadLiveStats();
 });
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"d360367b0e84435a9f0de3b2f47b62bc","r":1}' crossorigin="anonymous"></script>
+<script>
+if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '') {
+  var cfScript = document.createElement('script');
+  cfScript.type = 'module';
+  cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496';
+  cfScript.integrity = 'sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==';
+  cfScript.crossOrigin = 'anonymous';
+  cfScript.setAttribute('data-cf-beacon', '{"version":"2024.11.0","token":"d360367b0e84435a9f0de3b2f47b62bc","r":1}');
+  document.head.appendChild(cfScript);
+}
+</script>
 </body>
 </html>
