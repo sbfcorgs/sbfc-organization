@@ -1,0 +1,5 @@
+{
+  "summary":  "Cloudflare Pages / Edge Hosting security headers configuration file (_headers) providing HSTS, CSP, X-Frame-Options, X-Content-Type-Options, and Referrer-Policy.",
+  "updatedAt":  "2026-08-08T14:58:43.327767600Z",
+  "userFacing":  true
+}
