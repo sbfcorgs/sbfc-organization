@@ -518,6 +518,11 @@ export default {
     if (donationMatch && request.method === "PATCH")
       return withCors(await handleDonationStatus(request, env, Number(donationMatch[1])), request);
 
-    return withCors(await env.ASSETS.fetch(request), request);
+    // Static-file fallback: works both as a standalone Worker (env.ASSETS
+    // provided by the `assets` config) and as a Pages Function (no ASSETS,
+    // so unknown /api paths get a JSON 404 instead of a 500).
+    if (env.ASSETS && typeof env.ASSETS.fetch === "function")
+      return withCors(await env.ASSETS.fetch(request), request);
+    return json({ ok: false, error: "Not found." }, 404);
   },
 };
