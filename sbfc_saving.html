@@ -1,0 +1,388 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SBFC Transactions</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>:root{--bg:#07120d;--bg-card:#0d1f17;--accent:#4ade80;--white:#f4fff7;--text-muted:#9bbdab;--ff-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--ff-head:Inter,system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:var(--ff-body);line-height:1.45}.page-wrap{max-width:1440px;margin:auto;padding:28px}.admin-topbar,.topbar-right{display:flex;justify-content:space-between;gap:20px;align-items:center}.admin-topbar{margin-bottom:28px}.admin-topbar h1{margin:0;font-size:30px}.meta{color:var(--text-muted);font-size:14px}.glass-card{background:var(--bg-card);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:20px}.btn-primary{background:#1a6b4a;color:#fff;border:0;border-radius:8px;padding:10px 16px;font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:8px}table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}th{color:var(--text-muted)}input,select{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;font:inherit}.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}.modal-overlay.open{display:flex}.modal-box{background:var(--bg-card);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:28px;position:relative;max-width:560px;width:90%;max-height:90vh;overflow:auto}.modal-close{position:absolute;top:12px;right:12px;background:transparent;border:0;color:var(--text-muted);font-size:20px}.form-group{margin-bottom:16px}.form-group label{font-size:11px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}@media(max-width:650px){body{padding:0}.page-wrap{padding:18px}.admin-topbar{align-items:flex-start;flex-direction:column}.topbar-right{flex-wrap:wrap}}</style></head><body><div id="common-header"></div><main class="page-wrap">
+
+<div class="admin-topbar">
+    <div>
+        <span class="section-badge badge-saving" style="margin-bottom:8px;display:inline-flex;"><i class="fas fa-coins"></i>&nbsp; Savings & Finance</span>
+        <h1>Transactions</h1>
+        <div class="meta">All member saving & financial records</div>
+    </div>
+    <div class="topbar-right">
+        <button onclick="exportCSV()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:var(--text-muted);padding:10px 18px;border-radius:30px;cursor:pointer;font-family:var(--ff-body);font-size:13px;">
+            <i class="fas fa-download"></i> Export CSV
+        </button>
+        
+        <button id="addTransactionButton" onclick="openAddModal()" class="btn-primary" style="border:none;cursor:pointer;font-family:var(--ff-body);font-size:14px;">
+            <i class="fas fa-plus"></i> Add Transaction
+        </button>
+        
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:28px;">
+<div class="glass-card" style="padding:18px;"><div style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Total Share</div><div id="totalShare" style="font-family:var(--ff-head);font-size:24px;color:#4ade80;">0</div></div>
+<div class="glass-card" style="padding:18px;"><div style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Total Profit</div><div id="totalProfit" style="font-family:var(--ff-head);font-size:24px;color:#4ade80;">0</div></div>
+<div class="glass-card" style="padding:18px;"><div style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Loans Given</div><div id="loansGiven" style="font-family:var(--ff-head);font-size:24px;color:#fca5a5;">0</div></div>
+<div class="glass-card" style="padding:18px;"><div style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Cash In Hand</div><div id="cashInHand" style="font-family:var(--ff-head);font-size:24px;color:var(--accent);">0</div></div>
+</div>
+
+<!-- Filters -->
+<div class="glass-card" style="padding:18px 20px;margin-bottom:22px;">
+    <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+        <div style="flex:1;min-width:150px;">
+            <label style="font-size:11px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Member</label>
+            <select name="member_id" id="filterMember" style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#ffffff;font-family:var(--ff-body);font-size:13px;"><option value="">All Members</option></select>
+        </div>
+        <div style="flex:1;min-width:150px;">
+            <label style="font-size:11px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Type</label>
+            <select name="type" id="filterType" style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#ffffff;font-family:var(--ff-body);font-size:13px;"><option value="">All Types</option><option value="Share">Share</option><option value="Share Return">Share Return</option><option value="Profit">Profit</option><option value="Cost">Cost</option><option value="Loan">Loan</option><option value="Return Loan">Return Loan</option><option value="Business Loan">Business Loan</option><option value="Business Loan Return">Business Loan Return</option><option value="Deposit To Bank">Deposit To Bank</option><option value="Withdraw From Bank">Withdraw From Bank</option><option value="Bank Charge">Bank Charge</option><option value="Bank Profit">Bank Profit</option></select>
+        </div>
+        <div style="flex:1;min-width:130px;">
+            <label style="font-size:11px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Month</label>
+            <input type="month" name="month" id="filterMonth" value=""
+                style="width:100%;padding:9px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#ffffff;font-family:var(--ff-body);font-size:13px;">
+        </div>
+        <button type="submit" class="btn-primary" style="border:none;cursor:pointer;font-family:var(--ff-body);padding:9px 18px;white-space:nowrap;font-size:13px;">
+            <i class="fas fa-search"></i> Filter
+        </button>
+        <a href="sbfc_saving.html" style="padding:9px 14px;border:1px solid rgba(255,255,255,0.14);border-radius:30px;color:var(--text-muted);font-size:13px;display:inline-flex;align-items:center;gap:6px;">
+            <i class="fas fa-times"></i> Clear
+        </a>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="glass-card" style="padding:0;overflow:hidden;">
+    <div style="padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <div style="font-family:var(--ff-head);font-size:17px;color:var(--white);">Transaction Records</div>
+    </div>
+    <div style="overflow-x:auto;">
+        <table class="admin-table" id="savingTable">
+            <thead><tr>
+                <th>#</th><th>Date</th><th>Member ID</th><th>Name</th>
+                <th>Type</th><th style="text-align:right;">Amount</th>
+                <th>Remark</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="savingTableBody"><tr><td colspan="8" style="text-align:center;color:var(--text-muted);">Loading transactions…</td></tr></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ══ ADD MODAL ══ -->
+<div class="modal-overlay" id="addModal">
+<div class="modal-box" style="max-width:560px;">
+    <button class="modal-close" onclick="closeModal('addModal')"><i class="fas fa-times"></i></button>
+    <h3 style="font-family:var(--ff-head);font-size:20px;color:var(--white);margin-bottom:22px;">
+        <i class="fas fa-plus" style="color:#4ade80;margin-right:8px;"></i>Add Transaction
+    </h3>
+    <form id="addForm">
+        <!-- Row 1: Date + Type -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Date *</label>
+                <input type="date" name="date" id="addDate" required value="—">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Transaction Type *</label>
+                <select name="transaction_type" id="addTxType" required onchange="syncSections('add')">
+                    <option value="">— Select Type —</option>
+                    <optgroup label="👤 Member Transactions">
+                        <option value="Share">Share</option>
+                        <option value="Share Return">Share Return</option>
+                        <option value="Profit">Profit</option>
+                        <option value="Loan">Loan</option>
+                        <option value="Return Loan">Return Loan</option>
+                        <option value="Business Loan">Business Loan</option>
+                        <option value="Business Loan Return">Business Loan Return</option>
+                    </optgroup>
+                    <optgroup label="🏦 Bank Transactions">
+                        <option value="Deposit To Bank">Deposit To Bank</option>
+                        <option value="Withdraw From Bank">Withdraw From Bank</option>
+                        <option value="Bank Charge">Bank Charge</option>
+                        <option value="Bank Profit">Bank Profit</option>
+                    </optgroup>
+                    <optgroup label="💸 Expense">
+                        <option value="Cost">Cost</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION A: MEMBER -->
+        <div id="add-section-member" style="display:none;margin-bottom:16px;">
+            <div style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.18);border-radius:12px;padding:16px;">
+                <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;"><i class="fas fa-user"></i> Member Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Member ID *</label>
+                        <select id="addMemberId" onchange="fillMemberName('add')">
+                            <option value="">Select Member</option>
+                            
+                            <option value="—" data-name="—">
+                                — — —
+                            </option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Full Name <small style="color:var(--text-muted);">(auto)</small></label>
+                        <input type="text" id="addFullName" placeholder="Auto from Member ID" readonly style="background:rgba(255,255,255,0.03);cursor:default;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION B: BANK -->
+        <div id="add-section-bank" style="display:none;margin-bottom:16px;">
+            <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:12px;padding:16px;">
+                <div style="font-size:11px;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;"><i class="fas fa-university"></i> Bank Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Bank Account *</label>
+                        <select id="addBankName" onchange="fillBankNumber('add')">
+                            <option value="">Select Bank Account</option>
+                            <option value="Bank Asia Account" data-acc="5081126005781">Bank Asia Account</option>
+                            <option value="Other">Other (Manual)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Account Number</label>
+                        <input type="text" id="addBankAccNo" placeholder="Auto or enter manually" style="">
+                    </div>
+                </div>
+                <!-- Manual bank name (shown only for "Other") -->
+                <div class="form-group" id="addBankOtherWrap" style="margin-bottom:0;margin-top:12px;display:none;">
+                    <label>Bank Name (Manual) *</label>
+                    <input type="text" id="addBankOther" placeholder="e.g. Dutch Bangla Bank Account..." style="width:100%;">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION C: COST -->
+        <div id="add-section-cost" style="display:none;margin-bottom:16px;">
+            <div style="background:rgba(252,165,165,0.06);border:1px solid rgba(252,165,165,0.2);border-radius:12px;padding:16px;">
+                <div style="font-size:11px;font-weight:700;color:#fca5a5;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;"><i class="fas fa-receipt"></i> Cost Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Cost Category *</label>
+                        <select id="addCostCategory">
+                            <option value="">Select Category</option>
+                            
+                            <option value="—">—</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Paid / Handled By *</label>
+                        <input type="text" id="addCostBy" placeholder="e.g. Arif, Committee...">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Payment Method *</label>
+                    <select id="addCostPayMethod">
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash Payment">💵 Cash Payment</option>
+                        <option value="Account Payment - Bank Asia - 5081126005781">🏦 Account Payment — Bank Asia (5081126005781)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amount + Remark (always visible) -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Amount (BDT) *</label>
+                <input type="number" name="amount" min="1" step="0.01" placeholder="0.00" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Remark <small style="color:var(--text-muted);">(optional)</small></label>
+                <input type="text" name="remark" id="addRemark" placeholder="Short note...">
+            </div>
+        </div>
+
+        <!-- Hidden assembled fields -->
+        <input type="hidden" name="full_name" id="addFinalName">
+        <input type="hidden" name="member_id" id="addFinalMemberId">
+
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer;font-family:var(--ff-body);">
+            <i class="fas fa-save"></i> Save Transaction
+        </button>
+    </form>
+</div>
+</div>
+
+<!-- ══ EDIT MODAL ══ -->
+<div class="modal-overlay" id="editModal">
+<div class="modal-box" style="max-width:560px;">
+    <button class="modal-close" onclick="closeModal('editModal')"><i class="fas fa-times"></i></button>
+    <h3 style="font-family:var(--ff-head);font-size:20px;color:var(--white);margin-bottom:22px;">
+        <i class="fas fa-edit" style="color:var(--accent);margin-right:8px;"></i>Edit Transaction
+    </h3>
+    <form id="editForm">
+        <input type="hidden" name="action" value="edit">
+        <input type="hidden" name="id" id="editId">
+
+        <!-- Row 1: Date + Type -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Date *</label>
+                <input type="date" name="date" id="editDate" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Transaction Type *</label>
+                <select name="transaction_type" id="editTxType" required onchange="syncSections('edit')">
+                    <option value="">— Select Type —</option>
+                    <optgroup label="👤 Member Transactions">
+                        <option value="Share">Share</option>
+                        <option value="Share Return">Share Return</option>
+                        <option value="Profit">Profit</option>
+                        <option value="Loan">Loan</option>
+                        <option value="Return Loan">Return Loan</option>
+                        <option value="Business Loan">Business Loan</option>
+                        <option value="Business Loan Return">Business Loan Return</option>
+                    </optgroup>
+                    <optgroup label="🏦 Bank Transactions">
+                        <option value="Deposit To Bank">Deposit To Bank</option>
+                        <option value="Withdraw From Bank">Withdraw From Bank</option>
+                        <option value="Bank Charge">Bank Charge</option>
+                        <option value="Bank Profit">Bank Profit</option>
+                    </optgroup>
+                    <optgroup label="💸 Expense">
+                        <option value="Cost">Cost</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION A: MEMBER -->
+        <div id="edit-section-member" style="display:none;margin-bottom:16px;">
+            <div style="background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.18);border-radius:12px;padding:16px;">
+                <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;"><i class="fas fa-user"></i> Member Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Member ID</label>
+                        <select id="editMemberId" onchange="fillMemberName('edit')">
+                            <option value="">Select Member</option>
+                            
+                            <option value="—" data-name="—">
+                                — — —
+                            </option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Full Name <small style="color:var(--text-muted);">(auto)</small></label>
+                        <input type="text" id="editFullName" placeholder="Auto from Member ID" readonly style="background:rgba(255,255,255,0.03);cursor:default;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION B: BANK -->
+        <div id="edit-section-bank" style="display:none;margin-bottom:16px;">
+            <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:12px;padding:16px;">
+                <div style="font-size:11px;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;"><i class="fas fa-university"></i> Bank Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Bank Account *</label>
+                        <select id="editBankName" onchange="fillBankNumber('edit')">
+                            <option value="">Select Bank Account</option>
+                            <option value="Bank Asia Account" data-acc="5081126005781">Bank Asia Account</option>
+                            <option value="Other">Other (Manual)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Account Number</label>
+                        <input type="text" id="editBankAccNo" placeholder="Auto or enter manually">
+                    </div>
+                </div>
+                <div class="form-group" id="editBankOtherWrap" style="margin-bottom:0;margin-top:12px;display:none;">
+                    <label>Bank Name (Manual) *</label>
+                    <input type="text" id="editBankOther" placeholder="e.g. Dutch Bangla Bank Account..." style="width:100%;">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION C: COST -->
+        <div id="edit-section-cost" style="display:none;margin-bottom:16px;">
+            <div style="background:rgba(252,165,165,0.06);border:1px solid rgba(252,165,165,0.2);border-radius:12px;padding:16px;">
+                <div style="font-size:11px;font-weight:700;color:#fca5a5;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;"><i class="fas fa-receipt"></i> Cost Details</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Cost Category *</label>
+                        <select id="editCostCategory">
+                            <option value="">Select Category</option>
+                            
+                            <option value="—">—</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Paid / Handled By *</label>
+                        <input type="text" id="editCostBy" placeholder="e.g. Arif, Committee...">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Payment Method *</label>
+                    <select id="editCostPayMethod">
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash Payment">💵 Cash Payment</option>
+                        <option value="Account Payment - Bank Asia - 5081126005781">🏦 Account Payment — Bank Asia (BABL-5081126005781)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amount + Remark -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Amount (BDT) *</label>
+                <input type="number" name="amount" id="editAmt" step="0.01" min="1" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>Remark <small style="color:var(--text-muted);">(optional)</small></label>
+                <input type="text" name="remark" id="editRemark" placeholder="Short note...">
+            </div>
+        </div>
+
+        <!-- Hidden assembled -->
+        <input type="hidden" name="full_name"  id="editFinalName">
+        <input type="hidden" name="member_id"  id="editFinalMemberId">
+
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer;font-family:var(--ff-body);">
+            <i class="fas fa-save"></i> Update Transaction
+        </button>
+    </form>
+</div>
+</div>
+</main><div id="common-footer"></div><script>
+const API='/api';
+const MEMBER_TYPES=['Share','Share Return','Profit','Loan','Return Loan','Business Loan','Business Loan Return'];
+const BANK_TYPES=['Deposit To Bank','Withdraw From Bank','Bank Charge','Bank Profit'];
+let records=[], allRecords=[];
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const money=v=>Number(v||0).toLocaleString('en-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+const group=t=>MEMBER_TYPES.includes(t)?'member':BANK_TYPES.includes(t)?'bank':t==='Cost'?'cost':'none';
+async function request(path,options={}){const r=await fetch(API+path,{credentials:'include',headers:{'Content-Type':'application/json'},...options});let d;try{d=await r.json()}catch{throw Error('The server returned an invalid response.')};if(!r.ok||!d.ok)throw Error(d.error||'Request failed.');return d}
+function syncSections(p){const g=group($(p+'TxType').value);['member','bank','cost'].forEach(x=>$(p+'-section-'+x).style.display=g===x?'':'none')}
+function fillMemberName(p){const o=$(p+'MemberId').selectedOptions[0];$(p+'FullName').value=o?.dataset.name||''}
+function fillBankNumber(p){const s=$(p+'BankName'),o=s.selectedOptions[0];$(p+'BankAccNo').value=o?.dataset.acc||'';$(p+'BankOtherWrap').style.display=s.value==='Other'?'':'none'}
+async function loadMembers(){const d=await request('/savings-members');const options=d.members.map(m=>`<option value="${esc(m.member_id)}" data-name="${esc(m.full_name)}">${esc(m.member_id)} — ${esc(m.full_name)}</option>`).join('');['addMemberId','editMemberId'].forEach(id=>$(id).innerHTML='<option value="">Select Member</option>'+options);$('filterMember').innerHTML='<option value="">All Members</option>'+options}
+function totals(){const t={};allRecords.forEach(r=>t[r.transaction_type]=(t[r.transaction_type]||0)+Number(r.amount||0));const inHand=(t.Share||0)+(t.Profit||0)+(t['Return Loan']||0)+(t['Business Loan Return']||0)+(t['Withdraw From Bank']||0)-(t.Loan||0)-(t['Business Loan']||0)-(t.Cost||0)-(t['Share Return']||0)-(t['Deposit To Bank']||0);$('totalShare').textContent=money(t.Share);$('totalProfit').textContent=money(t.Profit);$('loansGiven').textContent=money((t.Loan||0)+(t['Business Loan']||0));$('cashInHand').textContent=money(inHand)}
+function row(r){const color={Share:'#4ade80',Profit:'#4ade80','Return Loan':'#4ade80','Business Loan Return':'#4ade80','Withdraw From Bank':'#4ade80','Share Return':'#fca5a5',Loan:'#fca5a5','Business Loan':'#fca5a5',Cost:'#fca5a5','Deposit To Bank':'#fca5a5','Bank Charge':'#fca5a5','Bank Profit':'#fbbf24'}[r.transaction_type]||'#fff';const canWrite=!window.sbfcViewOnly;return `<tr id="row-${r.entry_id}"><td style="color:var(--text-muted);font-size:12px">${r.entry_id}</td><td>${esc(r.date)}</td><td style="font-family:monospace;color:#4ade80;font-weight:600">${esc(r.member_id)||'—'}</td><td style="font-weight:600">${esc(r.full_name)||'—'}</td><td><span style="color:${color};white-space:nowrap">${esc(r.transaction_type)}</span></td><td style="text-align:right;font-weight:700;color:${color}">${money(r.amount)}</td><td style="color:var(--text-muted);font-size:13px;max-width:180px">${esc(r.remark||r.note||'')||'—'}</td><td style="white-space:nowrap"><button class="btn-primary" style="padding:5px 9px;background:#275b89" onclick="printTR(${r.entry_id})" title="Print"><i class="fas fa-print"></i></button>${canWrite?` <button class="btn-primary" style="padding:5px 9px;background:#8a651d" onclick="openEditModal(${r.entry_id})">Edit</button> <button class="btn-primary" style="padding:5px 9px;background:#8b3030" onclick="deleteRow(${r.entry_id})" title="Delete"><i class="fas fa-trash"></i></button>`:' <span style="color:rgba(255,255,255,.25)">—</span>'}</td></tr>`}
+async function loadTransactions(){const q=new URLSearchParams();if($('filterMember').value)q.set('member_id',$('filterMember').value);if($('filterType').value)q.set('transaction_type',$('filterType').value);if($('filterMonth').value)q.set('month',$('filterMonth').value);const d=await request('/savings?'+q);records=d.records;$('savingTableBody').innerHTML=records.length?records.map(row).join(''):'<tr><td colspan="8" style="text-align:center;color:var(--text-muted)">No transactions found.</td></tr>'}
+async function loadAllForTotals(){const d=await request('/savings');allRecords=d.records;totals()}
+function closeModal(id){$(id).classList.remove('open')}
+function openAddModal(){$('addForm').reset();$('addDate').value=new Date().toISOString().slice(0,10);syncSections('add');$('addModal').classList.add('open')}
+function openEditModal(id){const r=records.find(x=>Number(x.entry_id)===Number(id));if(!r)return;$('editId').value=r.entry_id;$('editDate').value=r.date;$('editTxType').value=r.transaction_type;$('editAmt').value=r.amount;$('editRemark').value=r.remark||r.note||'';syncSections('edit');const g=group(r.transaction_type);if(g==='member'){$('editMemberId').value=r.member_id;fillMemberName('edit')}else if(g==='bank'){const [n,a='']=String(r.full_name||'').split(' - ');$('editBankName').value=[...$('editBankName').options].some(o=>o.value===n)?n:'Other';$('editBankAccNo').value=a;if($('editBankName').value==='Other'){$('editBankOther').value=n;$('editBankOtherWrap').style.display=''}}else if(g==='cost'){const rem=$('editRemark').value;const get=x=>(rem.match(new RegExp(x+':\\s*([^|]+)'))||['',''])[1].trim();$('editCostCategory').value=get('Category');$('editCostBy').value=get('By');$('editCostPayMethod').value=get('Payment');$('editRemark').value=rem.replace(/Category:[^|]+\|?/g,'').replace(/By:[^|]+\|?/g,'').replace(/Payment:[^|]+\|?/g,'').replace(/^\s*\|?\s*/,'')} $('editModal').classList.add('open')}
+function payload(p){const type=$(p+'TxType').value,g=group(type);if(!type)throw Error('Select a transaction type.');let member_id='',full_name='',remark=$(p+'Remark').value.trim();if(g==='member'){member_id=$(p+'MemberId').value;full_name=$(p+'FullName').value;if(!member_id||!full_name)throw Error('Select a member.')}else if(g==='bank'){const n=$(p+'BankName').value==='Other'?$(p+'BankOther').value.trim():$(p+'BankName').value,a=$(p+'BankAccNo').value.trim();if(!n)throw Error('Select or enter a bank account.');full_name=n+(a?' - '+a:'')}else if(g==='cost'){const c=$(p+'CostCategory').value,b=$(p+'CostBy').value.trim(),pay=$(p+'CostPayMethod').value;if(!c||!b||!pay)throw Error('Complete the cost details.');full_name=b;remark=`Category: ${c} | By: ${b} | Payment: ${pay}`+(remark?' | '+remark:'')}const amount=Number($(p==='add'?'addForm':'editForm').amount.value);if(!$(p+'Date').value||!Number.isFinite(amount)||amount<=0)throw Error('Enter a valid date and amount.');return {date:$(p+'Date').value,transaction_type:type,amount,member_id,full_name,remark,note:''}}
+$('addForm').addEventListener('submit',async e=>{e.preventDefault();try{await request('/savings',{method:'POST',body:JSON.stringify(payload('add'))});closeModal('addModal');await Promise.all([loadTransactions(),loadAllForTotals()])}catch(e){alert(e.message)}});
+$('editForm').addEventListener('submit',async e=>{e.preventDefault();try{await request('/savings/'+$('editId').value,{method:'PUT',body:JSON.stringify(payload('edit'))});closeModal('editModal');await Promise.all([loadTransactions(),loadAllForTotals()])}catch(e){alert(e.message)}});
+async function deleteRow(id){if(!confirm('Delete this transaction? This cannot be undone.'))return;try{await request('/savings/'+id,{method:'DELETE'});await Promise.all([loadTransactions(),loadAllForTotals()])}catch(e){alert(e.message)}}
+function exportCSV(){const data=['#,Date,Member ID,Name,Type,Amount,Remark',...records.map(r=>[r.entry_id,r.date,r.member_id,r.full_name,r.transaction_type,r.amount,r.remark||r.note||''].map(v=>'"'+String(v).replaceAll('"','""')+'"').join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+data],{type:'text/csv;charset=utf-8'}));a.download='sbfc_transactions_'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(a.href)}
+function printTR(id){const r=records.find(x=>Number(x.entry_id)===Number(id));if(!r)return;const win=window.open('','_blank','width=440,height=620');if(!win)return;const safe=v=>esc(v||'—');win.document.write(`<!doctype html><title>Receipt #${r.entry_id}</title><style>body{font:14px Segoe UI,Arial;padding:28px;color:#111}.h{text-align:center;border-bottom:2px solid #111;padding-bottom:14px}.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}.amt{font-size:20px;font-weight:800;color:#17653f}.foot{text-align:center;color:#777;margin-top:20px;font-size:11px}</style><div class=h><h2>SBFC Organization</h2>Transaction Receipt</div><div class=row><b>TR #</b>${r.entry_id}</div><div class=row><b>Date</b>${safe(r.date)}</div><div class=row><b>Member ID</b>${safe(r.member_id)}</div><div class=row><b>Name / Account</b>${safe(r.full_name)}</div><div class=row><b>Type</b>${safe(r.transaction_type)}</div><div class="row amt"><b>Amount</b>${money(r.amount)}</div>${r.remark||r.note?`<div class=row><b>Remark</b>${safe(r.remark||r.note)}</div>`:''}<div class=foot>SBFC Organization | Printed: ${new Date().toLocaleString()}</div><p style="text-align:center"><button onclick="print()">Print</button> <button onclick="close()">Close</button></p>`);win.document.close()}
+async function loadShared(id,url){const t=$(id);try{const r=await fetch(url,{cache:'no-cache'});if(!r.ok)throw Error();t.innerHTML=await r.text();t.querySelectorAll('script').forEach(old=>{const s=document.createElement('script');[...old.attributes].forEach(a=>s.setAttribute(a.name,a.value));s.textContent=old.textContent;old.replaceWith(s)})}catch{t.replaceChildren()}}
+document.addEventListener('DOMContentLoaded',async()=>{await loadShared('common-header','/header.html');await loadShared('common-footer','/footer.html');try{const me=await request('/me');window.sbfcViewOnly=me.role==='user';$('addTransactionButton')?.toggleAttribute('hidden',window.sbfcViewOnly);await loadMembers();await Promise.all([loadTransactions(),loadAllForTotals()])}catch(e){$('savingTableBody').innerHTML=`<tr><td colspan="8" style="text-align:center;color:#fca5a5">${esc(e.message)}</td></tr>`}});$('filterMember').form.addEventListener('submit',e=>{e.preventDefault();loadTransactions()});
+</script>
+</body></html>

@@ -6,30 +6,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SBFC Organization — Help People Bangladesh | Donate | Quran Online</title>
 <meta name="description" content="SBFC Organization — helping poor people in Bangladesh since 1998. Donate to support underprivileged families, listen to Quran online free, and join our community welfare mission. Help people, change lives.">
-
-<!-- SEO Meta Tags -->
 <meta name="keywords" content="SBFC Organization, সমাজ উন্নয়ন, Bangladesh NGO, savings, community, donation, Zahir Uddin Rasel">
 <meta name="author" content="SBFC Organization">
 <meta name="robots" content="index, follow">
 <meta name="googlebot" content="index, follow">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 <link rel="canonical" href="https://sbfcorgs.com/">
-
-<!-- Open Graph (Facebook, WhatsApp preview) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SBFC Organization">
 <meta property="og:title" content="SBFC Organization — Help People Bangladesh | Donate | Quran Online">
-<meta property="og:description" content="SBFC Organization — helping poor people in Bangladesh since 1998. Donate to support underprivileged families, listen to Quran online free, and join our community welfare mission. Help people, change lives.">
+<meta property="og:description" content="SBFC Organization — helping poor people in Bangladesh since 1998. Donate to support underprivileged families, listen to Quran online free, and join our community welfare mission.">
 <meta property="og:image" content="https://sbfcorgs.com/images/logo.png">
 <meta property="og:url" content="https://sbfcorgs.com/">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SBFC Organization — Help People Bangladesh | Donate | Quran Online">
-<meta name="twitter:description" content="SBFC Organization — helping poor people in Bangladesh since 1998. Donate to support underprivileged families, listen to Quran online free, and join our community welfare mission. Help people, change lives.">
+<meta name="twitter:description" content="SBFC Organization — helping poor people in Bangladesh since 1998.">
 <meta name="twitter:image" content="https://sbfcorgs.com/images/logo.png">
-
-<!-- Structured Data (Google Knowledge) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -46,18 +38,30 @@
   }
 }
 </script>
-
-<link rel="icon" type="image/png" href="images/logo.png">
-
-<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="/images/logo.png">
+<link rel="stylesheet" href="/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+.live-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: #4ade80;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.impact-num-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.impact-num-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+.mission-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.mission-card:hover { transform: translateY(-5px); }
+</style>
 </head>
 <body>
 
-<!-- Common Header: loaded from header.html -->
 <div id="common-header"></div>
 
 <main>
@@ -69,44 +73,85 @@
     <h1><span class="h1-left">Empowering</span> <em>Communities,</em> <span class="h1-right">Changing Lives</span></h1>
     <p class="hero-para">SBFC Organization has been standing beside the underprivileged for over 28 years — providing relief, hope, and opportunity to those who need it most.</p>
     <div class="hero-btns">
-      <a href="give.html" class="btn-primary"><i class="fas fa-heart"></i> Donate Now</a>
-      <a href="about.html" class="btn-secondary"><i class="fas fa-arrow-right"></i> Our Mission</a>
+      <a href="/give.html" class="btn-primary"><i class="fas fa-heart"></i> Donate Now</a>
+      <a href="/about.html" class="btn-secondary"><i class="fas fa-arrow-right"></i> Our Mission</a>
     </div>
     <div class="hero-stats">
-      <div class="stat-item"><div class="num">28+</div><div class="label">Years of Service</div></div>
-      <div class="stat-item"><div class="num">5000+</div><div class="label">Lives Impacted</div></div>
-      <div class="stat-item"><div class="num">87%</div><div class="label">Funds to Beneficiaries</div></div>
+      <div class="stat-item">
+        <div class="num" id="statYears">28+</div>
+        <div class="label">Years of Service</div>
+      </div>
+      <div class="stat-item">
+        <div class="num" id="statMembers">—</div>
+        <div class="label">Active Members</div>
+      </div>
+      <div class="stat-item">
+        <div class="num" id="statDonations">—</div>
+        <div class="label">Donations Received</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- MISSION SECTION -->
+<div style="background:rgba(34,197,94,0.05);border-top:1px solid rgba(34,197,94,0.15);border-bottom:1px solid rgba(34,197,94,0.15);padding:10px 24px;">
+  <div style="max-width:1200px;margin:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:#9bbdab;">
+    <span class="live-dot"></span>
+    <span id="liveStatText">Fetching live stats from database…</span>
+  </div>
+</div>
+
 <section class="mission-section">
   <div class="section-tag">What We Do</div>
   <h2 class="section-heading">Our Core <em style="color:var(--accent);font-style:normal;">Mission</em></h2>
   <p class="section-sub">We serve with compassion, standing beside those in need through voluntary community action.</p>
   <div class="mission-grid">
-    <div class="glass-card mission-card fade-in"><div class="icon">🤝</div><h3>Community Support</h3><p>We provide consistent support to underprivileged families through food, medical assistance, and emergency relief programs.</p></div>
-    <div class="glass-card mission-card fade-in"><div class="icon">💊</div><h3>Healthcare Access</h3><p>Connecting vulnerable individuals to critical medical care, ensuring no one is denied treatment due to financial hardship.</p></div>
-    <div class="glass-card mission-card fade-in"><div class="icon">🌱</div><h3>Youth Empowerment</h3><p>Investing in the next generation through educational support, mentorship, and skill-development initiatives.</p></div>
+    <div class="glass-card mission-card fade-in">
+      <div class="icon">🤝</div>
+      <h3>Community Support</h3>
+      <p>We provide consistent support to underprivileged families through food, medical assistance, and emergency relief programs.</p>
+    </div>
+    <div class="glass-card mission-card fade-in">
+      <div class="icon">💊</div>
+      <h3>Healthcare Access</h3>
+      <p>Connecting vulnerable individuals to critical medical care, ensuring no one is denied treatment due to financial hardship.</p>
+    </div>
+    <div class="glass-card mission-card fade-in">
+      <div class="icon">🌱</div>
+      <h3>Youth Empowerment</h3>
+      <p>Investing in the next generation through educational support, mentorship, and skill-development initiatives.</p>
+    </div>
   </div>
 </section>
 
-<!-- IMPACT NUMBERS -->
 <section class="impact-section">
   <div class="center">
     <div class="section-tag">Our Impact</div>
     <h2 class="section-heading" style="color:var(--white);">Numbers That <em style="color:var(--accent);font-style:normal;">Matter</em></h2>
   </div>
   <div class="impact-numbers">
-    <div class="impact-num-card fade-in"><div class="big">28+</div><div class="divider"></div><div class="label">Years Serving Humanity</div></div>
-    <div class="impact-num-card fade-in"><div class="big">248</div><div class="divider"></div><div class="label">Families Helped This Month</div></div>
-    <div class="impact-num-card fade-in"><div class="big">87%</div><div class="divider"></div><div class="label">Funds Reach Beneficiaries</div></div>
-    <div class="impact-num-card fade-in"><div class="big">5</div><div class="divider"></div><div class="label">Founding Members</div></div>
+    <div class="impact-num-card fade-in">
+      <div class="big" id="impactYears">28+</div>
+      <div class="divider"></div>
+      <div class="label">Years Serving Humanity</div>
+    </div>
+    <div class="impact-num-card fade-in">
+      <div class="big" id="impactMembers">—</div>
+      <div class="divider"></div>
+      <div class="label">Active Members</div>
+    </div>
+    <div class="impact-num-card fade-in">
+      <div class="big" id="impactDonations">—</div>
+      <div class="divider"></div>
+      <div class="label">Total Donations</div>
+    </div>
+    <div class="impact-num-card fade-in">
+      <div class="big">5</div>
+      <div class="divider"></div>
+      <div class="label">Founding Members</div>
+    </div>
   </div>
 </section>
 
-<!-- STORY SECTION -->
 <section>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
     <div class="fade-in">
@@ -114,107 +159,163 @@
       <h2 class="section-heading">From Friendship<br><em style="color:var(--accent);font-style:normal;">to a Movement</em></h2>
       <p style="color:var(--text-muted);font-size:15px;margin-bottom:18px;">On January 3, 1998, a simple friendship turned into a dream — to serve humanity with sincerity and love.</p>
       <p style="color:var(--text-muted);font-size:15px;margin-bottom:32px;">SBFC Organization is not just a name — it is a commitment to standing beside those in need, a promise to bring hope to the helpless.</p>
-      <a href="history.html" class="btn-secondary"><i class="fas fa-book-open"></i> Read Our History</a>
+      <a href="/history.html" class="btn-secondary"><i class="fas fa-book-open"></i> Read Our History</a>
     </div>
     <div class="fade-in" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div class="glass-card" style="text-align:center;padding:28px 20px;"><div style="font-size:32px;margin-bottom:12px;">🏠</div><h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Emergency Relief</h4><p style="font-size:13px;color:var(--text-muted);">Immediate aid to families in crisis</p></div>
-      <div class="glass-card" style="text-align:center;padding:28px 20px;"><div style="font-size:32px;margin-bottom:12px;">🎓</div><h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Education</h4><p style="font-size:13px;color:var(--text-muted);">Supporting youth through learning</p></div>
-      <div class="glass-card" style="text-align:center;padding:28px 20px;"><div style="font-size:32px;margin-bottom:12px;">🍚</div><h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Food Support</h4><p style="font-size:13px;color:var(--text-muted);">Ensuring no family goes hungry</p></div>
-      <div class="glass-card" style="text-align:center;padding:28px 20px;"><div style="font-size:32px;margin-bottom:12px;">❤️</div><h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Compassion</h4><p style="font-size:13px;color:var(--text-muted);">Serving with heart &amp; dedication</p></div>
+      <div class="glass-card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:32px;margin-bottom:12px;">🏠</div>
+        <h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Emergency Relief</h4>
+        <p style="font-size:13px;color:var(--text-muted);">Immediate aid to families in crisis</p>
+      </div>
+      <div class="glass-card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:32px;margin-bottom:12px;">🎓</div>
+        <h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Education</h4>
+        <p style="font-size:13px;color:var(--text-muted);">Supporting youth through learning</p>
+      </div>
+      <div class="glass-card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:32px;margin-bottom:12px;">🍚</div>
+        <h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Food Support</h4>
+        <p style="font-size:13px;color:var(--text-muted);">Ensuring no family goes hungry</p>
+      </div>
+      <div class="glass-card" style="text-align:center;padding:28px 20px;">
+        <div style="font-size:32px;margin-bottom:12px;">❤️</div>
+        <h4 style="font-family:var(--ff-head);color:var(--white);font-size:16px;margin-bottom:6px;">Compassion</h4>
+        <p style="font-size:13px;color:var(--text-muted);">Serving with heart &amp; dedication</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
 <div class="cta-banner">
   <div>
     <h2>Ready to Make a Difference?</h2>
     <p>Your contribution creates real change in someone's life today.</p>
   </div>
-  <a href="give.html" class="btn-white"><i class="fas fa-heart"></i> Donate Now</a>
+  <a href="/give.html" class="btn-white"><i class="fas fa-heart"></i> Donate Now</a>
 </div>
 </main>
 
-<!-- Common Footer: loaded from footer.html -->
 <div id="common-footer"></div>
 
 <script>
-function initFadeIn() {
-  const elements = document.querySelectorAll('.fade-in');
-  if (!elements.length) return;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
-  elements.forEach((element) => {
-    if (element.getBoundingClientRect().top < window.innerHeight) {
-      element.classList.add('visible');
-    } else {
-      observer.observe(element);
+const API_BASE = "https://sbfc-organization.sbfcorgs.workers.dev";
+
+function animateCount(el, target, suffix = "") {
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current.toLocaleString() + suffix;
+        if (current >= target) clearInterval(timer);
+    }, 40);
+}
+
+async function loadLiveStats() {
+    try {
+        const res = await fetch(API_BASE + "/api/dashboard", {
+            credentials: "include",
+            cache: "no-store"
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        const s = data.savings || {};
+        const d = data.donations || [];
+        const memberCount = s.memberCount || s.totalMembers || 0;
+        const donationCount = d.length || data.donationStats?.total || 0;
+        const approvedCount = data.donationStats?.approved || 0;
+
+        const elMembers = document.getElementById("statMembers");
+        const elDonations = document.getElementById("statDonations");
+        if (elMembers) animateCount(elMembers, memberCount, "+");
+        if (elDonations) animateCount(elDonations, donationCount, "+");
+
+        const impMembers = document.getElementById("impactMembers");
+        const impDonations = document.getElementById("impactDonations");
+        if (impMembers) animateCount(impMembers, memberCount, "+");
+        if (impDonations) animateCount(impDonations, donationCount, "+");
+
+        const liveText = document.getElementById("liveStatText");
+        if (liveText) {
+            liveText.innerHTML = `Live data: <strong style="color:#4ade80;">${memberCount} active members</strong> · <strong style="color:#4ade80;">${donationCount} donations received</strong> · <strong style="color:#4ade80;">${approvedCount} approved</strong> — updated just now`;
+        }
+    } catch (err) {
+        console.warn("Live stats unavailable:", err.message);
+        const liveText = document.getElementById("liveStatText");
+        if (liveText) liveText.textContent = "Live stats temporarily unavailable.";
+        ["statMembers", "impactMembers"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = "248+"; });
+        ["statDonations", "impactDonations"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = "5000+"; });
     }
-  });
+}
+
+function initFadeIn() {
+    const elements = document.querySelectorAll('.fade-in');
+    if (!elements.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+    elements.forEach((element) => {
+        if (element.getBoundingClientRect().top < window.innerHeight) {
+            element.classList.add('visible');
+        } else { observer.observe(element); }
+    });
 }
 
 function toggleLang(event) {
-  event.stopPropagation();
-  const switcher = document.getElementById('langSwitcher');
-  if (switcher) switcher.classList.toggle('open');
+    event.stopPropagation();
+    const switcher = document.getElementById('langSwitcher');
+    if (switcher) switcher.classList.toggle('open');
 }
 
 document.addEventListener('click', () => {
-  const switcher = document.getElementById('langSwitcher');
-  if (switcher) switcher.classList.remove('open');
+    const switcher = document.getElementById('langSwitcher');
+    if (switcher) switcher.classList.remove('open');
 });
 
 async function loadCommonPart(targetId, fileName) {
-  const target = document.getElementById(targetId);
-  try {
-    const response = await fetch(fileName, { cache: 'no-cache' });
-    if (!response.ok) throw new Error(fileName + ' could not be loaded');
-    target.innerHTML = await response.text();
-
-    // Scripts inside an HTML fragment do not run automatically after insertion.
-    // Replace them so the common header date bar and calendar are activated.
-    target.querySelectorAll('script').forEach((oldScript) => {
-      const script = document.createElement('script');
-      [...oldScript.attributes].forEach((attribute) => script.setAttribute(attribute.name, attribute.value));
-      script.textContent = oldScript.textContent;
-      oldScript.replaceWith(script);
-    });
-  } catch (error) {
-    console.error(error);
-  }
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    try {
+        const response = await fetch(fileName, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(fileName + ' could not be loaded');
+        target.innerHTML = await response.text();
+        target.querySelectorAll('script').forEach((oldScript) => {
+            const script = document.createElement('script');
+            [...oldScript.attributes].forEach((attribute) => script.setAttribute(attribute.name, attribute.value));
+            script.textContent = oldScript.textContent;
+            oldScript.replaceWith(script);
+        });
+    } catch (error) { console.error(error); }
 }
 
 async function loadCommonLayout() {
-  await loadCommonPart('common-header', 'header.html');
-  await loadCommonPart('common-footer', 'footer.html');
+    await loadCommonPart('common-header', '/header.html');
+    await loadCommonPart('common-footer', '/footer.html');
 
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  const hamIcon = document.getElementById('hamIcon');
-  if (hamburger && navLinks && hamIcon) {
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-      hamIcon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-    });
-  }
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const hamIcon = document.getElementById('hamIcon');
+    if (hamburger && navLinks && hamIcon) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            hamIcon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        });
+    }
 
-  const mainHeader = document.getElementById('mainHeader');
-  if (mainHeader) {
-    window.addEventListener('scroll', () => {
-      mainHeader.classList.toggle('scrolled', window.scrollY > 60);
-    });
-  }
+    const mainHeader = document.getElementById('mainHeader');
+    if (mainHeader) {
+        window.addEventListener('scroll', () => {
+            mainHeader.classList.toggle('scrolled', window.scrollY > 60);
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  initFadeIn();
-  loadCommonLayout();
+    initFadeIn();
+    loadCommonLayout();
+    loadLiveStats();
 });
 </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"d360367b0e84435a9f0de3b2f47b62bc","r":1}' crossorigin="anonymous"></script>
 </body>
 </html>
-

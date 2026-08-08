@@ -170,7 +170,6 @@
             notice.innerHTML = '<i class="fas fa-sync fa-spin"></i> Loading financial data from Cloudflare D1 Database…';
 
             try {
-                // Try dashboard API first or savings report API
                 const res = await fetch(API_BASE + "/api/dashboard", {
                     credentials: "include",
                     cache: "no-store"
@@ -216,7 +215,7 @@
                 document.getElementById("plNetProfit").textContent = "৳" + fmt.format(netProfit);
                 document.getElementById("plNetProfit").style.color = netProfit >= 0 ? "#4ade80" : "#fca5a5";
 
-                // Render Member Profit Table (from dashboard or calculation)
+                // Render Member Profit Table
                 const tbody = document.getElementById("memberProfitRows");
                 tbody.innerHTML = `
                     <tr>

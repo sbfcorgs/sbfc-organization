@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -13,6 +13,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+    <!-- à§§. à¦®à§‚à¦² à¦“à§Ÿà§‡à¦¬à¦¸à¦¾à¦‡à¦Ÿ à¦¸à§à¦Ÿà¦¾à¦‡à¦² à¦¯à§à¦•à§à¦¤ à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡ -->
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
@@ -284,7 +285,7 @@
                 color: var(--white);
                 font-weight: 600;
               "
-              >Loading…</span
+              >Loadingâ€¦</span
             ><span
               id="adminRole"
               style="font-size: 11px; color: var(--text-muted)"
@@ -292,7 +293,7 @@
           </div>
         </div>
       </div>
-      <div id="status">Loading dashboard data…</div>
+      <div id="status">Loading dashboard dataâ€¦</div>
       <section>
         <div class="section-row">
           <span class="section-badge badge-donation"
@@ -310,7 +311,7 @@
           >
             <div class="metric-label">Total</div>
             <div class="metric-value" style="color: #fb923c" id="donTotal">
-              —
+              â€”
             </div>
             <div class="metric-detail">All submissions</div>
           </div>
@@ -320,9 +321,9 @@
           >
             <div class="metric-label">Approved</div>
             <div class="metric-value" style="color: #6ee7b7" id="donApproved">
-              —
+              â€”
             </div>
-            <div class="metric-detail" id="donApprovedAmount">—</div>
+            <div class="metric-detail" id="donApprovedAmount">â€”</div>
           </div>
           <div
             class="glass-card metric"
@@ -334,9 +335,9 @@
               style="color: var(--accent)"
               id="donPending"
             >
-              —
+              â€”
             </div>
-            <div class="metric-detail" id="donPendingAmount">—</div>
+            <div class="metric-detail" id="donPendingAmount">â€”</div>
           </div>
           <div
             class="glass-card metric"
@@ -344,7 +345,7 @@
           >
             <div class="metric-label">Rejected</div>
             <div class="metric-value" style="color: #fca5a5" id="donRejected">
-              —
+              â€”
             </div>
             <div class="metric-detail">Declined</div>
           </div>
@@ -399,7 +400,7 @@
             style="border-color: rgba(34, 197, 94, 0.15)"
           >
             <div class="metric-label">Total Cash In</div>
-            <div class="metric-value" style="color: #4ade80" id="cashIn">—</div>
+            <div class="metric-value" style="color: #4ade80" id="cashIn">â€”</div>
             <div class="metric-detail">Share + Profit + Returns</div>
           </div>
           <div
@@ -408,7 +409,7 @@
           >
             <div class="metric-label">Total Cash Out</div>
             <div class="metric-value" style="color: #fca5a5" id="cashOut">
-              —
+              â€”
             </div>
             <div class="metric-detail">Loans + Cost + Deposits</div>
           </div>
@@ -422,16 +423,16 @@
               style="color: var(--accent)"
               id="cashHand"
             >
-              —
+              â€”
             </div>
             <div class="metric-detail">Current balance</div>
           </div>
           <div class="glass-card metric">
             <div class="metric-label">Members</div>
             <div class="metric-value" style="color: #a78bfa" id="members">
-              —
+              â€”
             </div>
-            <div class="metric-detail" id="txCount">— transactions</div>
+            <div class="metric-detail" id="txCount">â€” transactions</div>
           </div>
         </div>
         <div class="charts">
@@ -478,7 +479,7 @@
       function dateText(value) {
         const d = new Date(value);
         return Number.isNaN(+d)
-          ? "—"
+          ? "â€”"
           : d.toLocaleString("en-GB", {
               day: "2-digit",
               month: "short",
@@ -542,7 +543,7 @@
                 isNew =
                   status === "pending" &&
                   Date.now() - new Date(row.created_at).getTime() < 300000;
-              return `<tr class="${isNew ? "pending-row" : ""}"><td style="font-weight:600;color:var(--white)">${escapeHTML(row.name)}${isNew ? ' <span class="badge badge-yellow">New</span>' : ""}</td><td>${escapeHTML(row.email || "—")}</td><td style="font-weight:700;color:#fb923c">${money(row.amount)}</td><td>${escapeHTML(row.payment_method || "—")}</td><td style="font-family:monospace;font-size:12px">${escapeHTML(row.tr_id || "—")}</td><td><span class="badge ${cls}">${escapeHTML(status[0].toUpperCase() + status.slice(1))}</span></td><td style="font-size:12px">${dateText(row.created_at)}</td><td>${!viewOnly && status === "pending" ? `<button class="badge badge-green" data-action="approved" data-id="${row.id}" style="border:0;cursor:pointer;margin-right:4px">✓</button><button class="badge badge-red" data-action="rejected" data-id="${row.id}" style="border:0;cursor:pointer">✗</button>` : "—"}</td></tr>`;
+              return `<tr class="${isNew ? "pending-row" : ""}"><td style="font-weight:600;color:var(--white)">${escapeHTML(row.name)}${isNew ? ' <span class="badge badge-yellow">New</span>' : ""}</td><td>${escapeHTML(row.email || "â€”")}</td><td style="font-weight:700;color:#fb923c">${money(row.amount)}</td><td>${escapeHTML(row.payment_method || "â€”")}</td><td style="font-family:monospace;font-size:12px">${escapeHTML(row.tr_id || "â€”")}</td><td><span class="badge ${cls}">${escapeHTML(status[0].toUpperCase() + status.slice(1))}</span></td><td style="font-size:12px">${dateText(row.created_at)}</td><td>${!viewOnly && status === "pending" ? `<button class="badge badge-green" data-action="approved" data-id="${row.id}" style="border:0;cursor:pointer;margin-right:4px">âœ“</button><button class="badge badge-red" data-action="rejected" data-id="${row.id}" style="border:0;cursor:pointer">âœ—</button>` : "â€”"}</td></tr>`;
             })
             .join("") ||
           '<tr><td colspan="8" style="text-align:center;color:var(--text-muted)">No donations found.</td></tr>';
@@ -585,7 +586,7 @@
             cache: "no-store",
           });
           if (r.status === 401) {
-            location.href = "/login.html";
+            location.href = "/admin_login.html";
             return;
           }
           const data = await r.json();
@@ -599,7 +600,6 @@
           renderSavings(data.savings);
           hideStatus();
         } catch (error) {
-          // A static preview cannot reach the deployed Worker; keep the page usable.
           const message = error instanceof Error ? error.message : "Unable to load data.";
           showStatus(message + " Please refresh or sign in again.");
         }
@@ -656,6 +656,7 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+  // à§¨. à¦°à§à¦Ÿ à¦ªà¦¾à¦¥ à¦¸à§à¦²à¦¾à¦¶ (/) à¦¸à¦¹ à¦¹à§‡à¦¡à¦¾à¦° à¦“ à¦«à§à¦Ÿà¦¾à¦° à¦²à§‹à¦¡ à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡
   await loadShared("common-header", "/header.html");
   await loadShared("common-footer", "/footer.html");
 
@@ -672,6 +673,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
     </script>
-  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"d360367b0e84435a9f0de3b2f47b62bc","r":1}' crossorigin="anonymous"></script>
 </body>
 </html>
+

@@ -1,8 +1,17 @@
-<?php
-require '../db.php';
-$pageTitle = "Mst Khadija Akter | SBFC Organization";
-include '../profiles/header.php';
-?>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mst Khadija Akter | SBFC Organization</title>
+  <link rel="icon" type="image/png" href="../images/default_avatar.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="common-header"></div>
 <style>
 .fm-hero{min-height:25vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 6% 30px;background:linear-gradient(150deg,#0d1f17,#12381f);position:relative;overflow:hidden;}
 .fm-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(245,166,35,0.06),transparent 60%);pointer-events:none;}
@@ -16,7 +25,7 @@ include '../profiles/header.php';
 </style>
 
 <section class="fm-hero">
-  <img src="images/khadija.jpg" alt="Mst Khadija Akter" class="fm-avatar"
+  <img src="images/default_avatar.svg" alt="Mst Khadija Akter" class="fm-avatar"
     onerror="this.src='images/default_avatar.svg'">
   <div class="fm-name">Mst Khadija Akter</div>
   <div class="fm-role">Spouse of Md Zahir Uddin Rasel</div>
@@ -29,7 +38,7 @@ include '../profiles/header.php';
       <div class="info-row"><span class="info-label">Relation</span><span class="info-value">Spouse of Md Zahir Uddin Rasel</span></div>
       <div class="info-row"><span class="info-label">Date of Birth</span><span class="info-value">07 - March - 1997</span></div> 
       <div class="info-row"><span class="info-label">Children</span><span class="info-value">Girls-01, Boys-01</span></div>
-      <div class="info-row"><span class="info-label">Children Name</span><span class="info-value"><a href="../family/fatima.php" style="color:var(--accent);text-decoration:none;">Fatima Tur Rafiya ↗</a> &nbsp;/&nbsp;<a href="../family/mehmed.php" style="color:var(--accent);text-decoration:none;">Mehmed Mostafa ↗</a></span></div>
+      <div class="info-row"><span class="info-label">Children Name</span><span class="info-value"><a href="../family/fatima.html" style="color:var(--accent);text-decoration:none;">Fatima Tur Rafiya â†—</a> &nbsp;/&nbsp;<a href="../family/mehmed.html" style="color:var(--accent);text-decoration:none;">Mehmed Mostafa â†—</a></span></div>
       <div class="info-row"><span class="info-label">Nationality</span><span class="info-value">Bangladeshi</span></div>
       <div class="info-row"><span class="info-label">Religion</span><span class="info-value">Islam</span></div>
       <div class="info-row"><span class="info-label">Location</span><span class="info-value">Dhaka, Bangladesh</span></div>
@@ -37,10 +46,14 @@ include '../profiles/header.php';
       
     </div>
     <div style="margin-top:24px;text-align:center;">
-      <a href="../profiles/zahirasel.php" style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--accent);padding:10px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;">
+      <a href="../profiles/zahirasel.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--accent);padding:10px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;">
         &#8592; View Md Zahir Uddin Rasel's Profile
       </a>
     </div>
   </div>
 </section>
-<?php include '../profiles/footer.php'; ?>
+<div id="common-footer"></div>
+<script src="../common-layout.js"></script>
+</body>
+</html>
+

@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   function injectBanner() {
     var hero = document.querySelector('.home-hero') || document.querySelector('.sbfc-hero');
     if (!hero) return;
@@ -29,7 +29,7 @@
       '</div>',
       '<p style="font-size:15px;color:rgba(255,255,255,0.82);line-height:1.8;margin:0 0 8px;">\u0986\u09aa\u09a8\u09be\u09a6\u09c7\u09b0 <strong style="color:#f5a623;">\u09ae\u09be\u09a4\u09cd\u09b0 \u09ec\u09e6\u09e6\u09e6 \u099f\u09be\u0995\u09be</strong><br>\u09b8\u09c7\u09a6\u09bf\u09a8 \u09b8\u09c7\u0987 \u09b6\u09bf\u09b6\u09c1\u09b0 \u099c\u09c0\u09ac\u09a8 \u09ac\u09be\u0981\u099a\u09bf\u09af\u09bc\u09c7\u099b\u09bf\u09b2\u0964</p>',
       '<p style="font-size:12px;color:rgba(255,255,255,0.28);font-style:italic;margin:0 0 24px;">One small act of kindness. One life saved forever.</p>',
-      '<a href="give.php" style="display:inline-block;background:#c0392b;color:#fff;font-size:14px;font-weight:700;padding:13px 32px;border-radius:50px;text-decoration:none;margin-bottom:24px;">\u2665 \u0986\u099c\u0987 \u09aa\u09be\u09b6\u09c7 \u09a6\u09be\u0981\u09dc\u09be\u09a8</a>',
+      '<a href="give.html" style="display:inline-block;background:#c0392b;color:#fff;font-size:14px;font-weight:700;padding:13px 32px;border-radius:50px;text-decoration:none;margin-bottom:24px;">\u2665 \u0986\u099c\u0987 \u09aa\u09be\u09b6\u09c7 \u09a6\u09be\u0981\u09dc\u09be\u09a8</a>',
       '<div style="display:flex;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;">',
       '<div style="flex:1;padding:12px 8px;text-align:center;"><div style="font-size:17px;font-weight:700;color:#f5a623;">5000+</div><div style="font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px;">\u09aa\u09b0\u09bf\u09ac\u09be\u09b0 \u0989\u09aa\u0995\u09c3\u09a4</div></div>',
       '<div style="width:1px;background:rgba(255,255,255,0.1);"></div>',
@@ -57,3 +57,4 @@
     setTimeout(injectBanner, 1500);
   });
 })();
+

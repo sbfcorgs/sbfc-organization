@@ -1,8 +1,17 @@
-<?php
-require '../db.php';
-$pageTitle = "Fatima Tur Rafiya | SBFC Organization";
-include '../profiles/header.php';
-?>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sumaiya Akter | SBFC Organization</title>
+  <link rel="icon" type="image/png" href="../images/default_avatar.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div id="common-header"></div>
 <style>
 .fm-hero{min-height:25vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 6% 30px;background:linear-gradient(150deg,#0d1f17,#12381f);position:relative;overflow:hidden;}
 .fm-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(245,166,35,0.06),transparent 60%);pointer-events:none;}
@@ -16,28 +25,33 @@ include '../profiles/header.php';
 </style>
 
 <section class="fm-hero">
-  <img src="images/fatima.webp" alt="Fatima Tur Rafiya" class="fm-avatar" loading="lazy" decoding="async"
+  <img src="images/default_avatar.svg" alt="Sumaiya Akter" class="fm-avatar"
     onerror="this.src='images/default_avatar.svg'">
-  <div class="fm-name">Fatima Tur Rafiya</div>
-  <div class="fm-role">Daughter of Md Zahir Uddin Rasel</div>
+  <div class="fm-name">Sumaiya Akter</div>
+  <div class="fm-role">Daughter of Md Mashud Rana</div>
 </section>
 
 <section>
   <div style="max-width:600px;margin:0 auto;">
     <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:32px;">
-      <div class="info-row"><span class="info-label">Full Name</span><span class="info-value">Fatima Tur Rafiya</span></div>
-      <div class="info-row"><span class="info-label">Relation</span><span class="info-value">Daughter of Md Zahir Uddin Rasel</span></div>
-      <div class="info-row"><span class="info-label">Date of Birth</span><span class="info-value">17 April 2018</span></div>
+      <div class="info-row"><span class="info-label">Full Name</span><span class="info-value">Sumaiya Akter</span></div>
+      <div class="info-row"><span class="info-label">Relation</span><span class="info-value">Daughter of Md Mashud Rana</span></div>
+      <div class="info-row"><span class="info-label">Date of Birth</span><span class="info-value">Not publicly listed</span></div>
       <div class="info-row"><span class="info-label">Nationality</span><span class="info-value">Bangladeshi</span></div>
       <div class="info-row"><span class="info-label">Religion</span><span class="info-value">Islam</span></div>
-      <div class="info-row"><span class="info-label">Location</span><span class="info-value">Dhaka, Bangladesh</span></div>
+      <div class="info-row"><span class="info-label">Location</span><span class="info-value">KSA</span></div>
       
     </div>
     <div style="margin-top:24px;text-align:center;">
-      <a href="../profiles/zahirasel.php" style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--accent);padding:10px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;">
-        &#8592; View Md Zahir Uddin Rasel's Profile
+      <a href="../profiles/rana.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:var(--accent);padding:10px 24px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;">
+        &#8592; View Md Mashud Rana's Profile
       </a>
     </div>
   </div>
 </section>
-<?php include '../profiles/footer.php'; ?>
+<div id="common-footer"></div>
+<script src="../common-layout.js"></script>
+</body>
+</html>
+
+

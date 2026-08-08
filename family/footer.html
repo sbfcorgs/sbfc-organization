@@ -1,0 +1,105 @@
+﻿<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-top" style="padding:36px 6% 24px!important;gap:28px!important;">
+
+    <div class="footer-brand">
+      <div class="fb-logo" style="margin-bottom:10px!important;">
+        <img src="../images/default_avatar.svg" alt="SBFC Logo" style="width:36px;height:36px;">
+        <span class="fb-name" style="font-size:16px;">SBFC Organization</span>
+      </div>
+      <p style="font-size:12px;line-height:1.6;">Dedicated to building stronger communities and empowering lives since 1998. Together we make a difference.</p>
+      <div class="footer-social" style="margin-top:12px!important;">
+        <a href="#" aria-label="Facebook" style="width:30px;height:30px;font-size:12px;"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="YouTube" style="width:30px;height:30px;font-size:12px;"><i class="fab fa-youtube"></i></a>
+        <a href="#" aria-label="Instagram" style="width:30px;height:30px;font-size:12px;"><i class="fab fa-instagram"></i></a>
+        <a href="https://x.com/sbfcorgs" aria-label="Twitter" style="width:30px;height:30px;font-size:12px;"><i class="fab fa-twitter"></i></a>
+        <a href="https://w.app/sbfcorgs" aria-label="WhatsApp" style="width:30px;height:30px;font-size:12px;"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5 style="font-size:13px;margin-bottom:10px!important;padding-bottom:8px!important;text-align:center!important;">Quick Links</h5>
+      <ul style="display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;">
+        <li style="margin-bottom:6px!important;"><a href="../index.html" style="font-size:12px;">Home</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../founder.html" style="font-size:12px;">Founders</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../gallery.html" style="font-size:12px;">Gallery</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../contact.html" style="font-size:12px;">Contact</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../history.html" style="font-size:12px;">History</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../about.html" style="font-size:12px;">About Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5 style="font-size:13px;margin-bottom:10px!important;padding-bottom:8px!important;text-align:center!important;">Our Mission</h5>
+      <ul style="display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;">
+        <li style="margin-bottom:6px!important;"><a href="../give.html" style="font-size:12px;">Make a Donation</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../contact.html" style="font-size:12px;">Volunteer</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../history.html" style="font-size:12px;">Our Journey</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../contact.html" style="font-size:12px;">Partnerships</a></li>
+        <li style="margin-bottom:6px!important;"><a href="../about.html" style="font-size:12px;">Impact Report</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5 style="font-size:13px;margin-bottom:10px!important;padding-bottom:8px!important;">Contact Info</h5>
+      <div class="fc-contact-item" style="font-size:12px;margin-bottom:8px!important;"><i class="fas fa-map-marker-alt"></i> Dhaka-1204, Bangladesh</div>
+      <div class="fc-contact-item" style="font-size:12px;margin-bottom:8px!important;"><i class="fas fa-phone-alt"></i> +880 199 250 0204</div>
+      <div class="fc-contact-item" style="font-size:12px;margin-bottom:8px!important;"><i class="fas fa-envelope"></i> sbfcorgs@gmail.com</div>
+    </div>
+
+  </div>
+
+
+<!-- Visitor Counter -->
+<div id="visitor-counter" style="text-align:center;padding:6px 0;background:rgba(0,0,0,0.2);font-family:'DM Sans',sans-serif;">
+  <span style="color:rgba(255,255,255,0.5);font-size:11px;letter-spacing:0.5px;">
+    <i class="fas fa-eye" style="color:#22c55e;margin-right:6px;"></i>
+    Total Visitors: <strong id="vc-num" style="color:#22c55e;">...</strong>
+    &nbsp;|&nbsp;
+    <i class="fas fa-circle" style="color:#22c55e;font-size:7px;margin-right:4px;animation:qpulse 2s infinite;"></i>
+    Online: <strong id="vc-online" style="color:#22c55e;">...</strong>
+  </span>
+</div>
+ <div class="footer-bottom" style="padding:12px 6%!important;font-size:11px!important;">
+    <span>&copy; 2026 SBFC Organization. All Rights Reserved.</span>
+    <span>Built with <span style="color:#ef4444">&#9829;</span> for Humanity</span>
+  </div>
+</footer>
+
+<script>
+window.SBFC_VISITOR_COUNTER_URL =
+  'https://sbfc-visitor-counter.sbfcorgs.workers.dev';
+
+(function () {
+  var totalElement = document.getElementById('vc-num');
+  var onlineElement = document.getElementById('vc-online');
+
+  if (!totalElement || !onlineElement) return;
+
+  fetch(window.SBFC_VISITOR_COUNTER_URL, {
+    method: 'GET',
+    credentials: 'include',
+    cache: 'no-store',
+    headers: { Accept: 'application/json' }
+  })
+    .then(function (response) {
+      if (!response.ok) throw new Error('Counter failed');
+      return response.json();
+    })
+    .then(function (data) {
+      totalElement.textContent =
+        Number(data.total || 0).toLocaleString();
+
+      onlineElement.textContent =
+        Number(data.online || 0).toLocaleString();
+    })
+    .catch(function () {
+      totalElement.textContent = 'â€”';
+      onlineElement.textContent = 'â€”';
+    });
+}());
+</script>
+
+
+
+
