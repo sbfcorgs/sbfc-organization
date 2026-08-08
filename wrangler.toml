@@ -19,5 +19,5 @@ assets = { directory = ".", run_worker_first = true }
 
 [[d1_databases]]
 binding = "DB"
-database_name = "sbfc"
+database_name = "sbfc_db"
 database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

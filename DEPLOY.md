@@ -18,10 +18,11 @@ panel both call `/api/*` on the same origin, so once this is deployed there are
 npx wrangler login
 
 # create the D1 database (do this once) and copy the printed database_id
-npx wrangler d1 create sbfc
+npx wrangler d1 create sbfc_db   # if you don't already have it — you do (sbfc_db)
 
-# apply the schema (creates tables + seeds admin/admin123)
-npx wrangler d1 execute sbfc --remote --file=./schema.sql
+# apply the schema ONLY if you created a fresh database (your existing
+# sbfc_db already has all tables and data — skip this if so)
+npx wrangler d1 execute sbfc_db --remote --file=./schema.sql
 ```
 
 Then bind the database to the Pages project (name must be exactly **`DB`** —
@@ -29,7 +30,8 @@ that is what `index.js` reads):
 
 > Cloudflare dashboard → **Workers & Pages** → your Pages project →
 > **Settings** → **Functions** → **D1 database bindings** → Add binding:
-> Variable name: `DB` · D1 database: `sbfc`
+> Variable name: `DB` · D1 database: `sbfc_db` (your existing database —
+> do NOT create a new one; it already has all tables and your data)
 
 ## 3. Deploy the site (including the API)
 
